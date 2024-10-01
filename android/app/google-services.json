@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "451161341533", 
+    "project_id": "bharatiya-astro-astrologer",
+    "storage_bucket": "bharatiya-astro-astrologer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451161341533:android:d1e004fe592bbf27a717b4",
+        "android_client_info": {
+          "package_name": "com.bharatiyastro.astrologer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHP77oq5jt_MVCM_zSMO25a5ix0oMkT-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451161341533:android:6be234d5b4ca8dbea717b4",
+        "android_client_info": {
+          "package_name": "com.bharatiyastro.userapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHP77oq5jt_MVCM_zSMO25a5ix0oMkT-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
