@@ -49,6 +49,7 @@ dependencies:
   custom_clippers: ^2.0.0
   timelines: ^0.1.0
   url_launcher: ^6.1.7
+  facebook_app_events:
 
   #WEBVIEW
   webview_flutter: ^3.0.4
@@ -58,7 +59,7 @@ dependencies:
 
   #AGORA
   agora_rtm: ^1.5.0
-  agora_rtc_engine: ^6.3.2 
+  agora_rtc_engine: ^6.3.2
 
   #SYSTEM PERMISSION
   permission_handler: ^10.2.0

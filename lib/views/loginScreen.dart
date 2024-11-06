@@ -336,95 +336,93 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           bottomNavigationBar: SizedBox(
-            height: Get.height * 0.1,
+            height: Get.height * 0.11,
             child: Container(
               decoration: BoxDecoration(color: Get.theme.primaryColor),
-              child: SizedBox(
-                width: Get.width * 0.7,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // SizedBox(
-                    //   height: 15,                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Made in 🇮🇳 with ❤'),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "\u00a9 Yassh Consultancy Services",
-                          style: Get.textTheme.labelLarge!.copyWith(fontSize: 17, color: Colors.white),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                            // onTap: () {
-                            //   _launchURL();
-                            // },
-                            child: Text(
-                          'Developed by:Kriscent Techo Hub',
-                          style: Get.textTheme.labelLarge!.copyWith(color: Colors.black),
-                        ))
-                      ],
-                    ),
+              width: Get.width * 0.7,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // SizedBox(
+                  //   height: 15,                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Made in 🇮🇳 with ❤'),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "\u00a9 Yassh Consultancy Services",
+                        style: Get.textTheme.labelLarge!.copyWith(fontSize: 17, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                          // onTap: () {
+                          //   _launchURL();
+                          // },
+                          child: Text(
+                        'Developed by:Kriscent Techo Hub',
+                        style: Get.textTheme.labelLarge!.copyWith(color: Colors.black),
+                      ))
+                    ],
+                  ),
 
-                    //    Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //       InkWell(
-                    //         onTap: () {
-                    //           _launchURL();
-                    //         },
-                    //         child:Text("\u00a9 Yassh Consultancy Services",
-                    //         style: Get.textTheme.labelLarge!.copyWith(
-                    //           color: Colors.white
-                    //         ),
-                    //         ))
-                    //   ],
-                    // ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'By signing up, you agree to our',
-                          style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.white, fontSize: 11),
+                  //    Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //       InkWell(
+                  //         onTap: () {
+                  //           _launchURL();
+                  //         },
+                  //         child:Text("\u00a9 Yassh Consultancy Services",
+                  //         style: Get.textTheme.labelLarge!.copyWith(
+                  //           color: Colors.white
+                  //         ),
+                  //         ))
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'By signing up, you agree to our',
+                        style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.white, fontSize: 11),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => TermsAndConditionScreen());
+                        },
+                        child: Text(
+                          'Terms of Use ',
+                          style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.black, fontSize: 11),
                         ),
-                        InkWell(
-                          onTap: () {
-                            Get.to(() => TermsAndConditionScreen());
-                          },
-                          child: Text(
-                            'Terms of Use ',
-                            style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.black, fontSize: 11),
-                          ),
+                      ),
+                      Text(
+                        'and ',
+                        style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.white, fontSize: 11),
+                      ),
+                      InkWell(
+                        onTap: () => {Get.to(() => PrivacyPolicyScreen())},
+                        child: Text(
+                          'Privacy Policy',
+                          style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.black, fontSize: 11),
                         ),
-                        Text(
-                          'and ',
-                          style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.white, fontSize: 11),
-                        ),
-                        InkWell(
-                          onTap: () => {Get.to(() => PrivacyPolicyScreen())},
-                          child: Text(
-                            'Privacy Policy',
-                            style: Get.theme.textTheme.titleSmall!.copyWith(color: Colors.black, fontSize: 11),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

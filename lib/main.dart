@@ -25,6 +25,7 @@ import 'package:BharatiyAstro/views/chat/incoming_chat_request.dart';
 import 'package:BharatiyAstro/views/live_astrologer/live_astrologer_screen.dart';
 import 'package:BharatiyAstro/views/loginScreen.dart';
 import 'package:BharatiyAstro/views/splashScreen.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -209,6 +210,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  final facebookAppEvents = FacebookAppEvents();
+  facebookAppEvents.logEvent(
+    name:"app_launch",
+    parameters: {
+      'timestamp': DateTime.now().toString()
+    },
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   HttpOverrides.global = PostHttpOverrides();
