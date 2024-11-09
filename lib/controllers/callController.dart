@@ -67,6 +67,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     await global.sp!.setString('bottomCallFcmToken', fcmToken);
     await global.sp!.setString('bottomCallChannel', channelName);
     FlutterRingtonePlayer.playRingtone(asAlarm: false);
+    FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
     NoticationController notificationController = Get.put(NoticationController());
     // log("Availibilty=============================================================${bottomNavigationController.astrologerbyId[0].name}");
     update();
