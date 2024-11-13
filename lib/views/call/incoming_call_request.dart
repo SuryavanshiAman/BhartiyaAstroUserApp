@@ -132,8 +132,16 @@ class IncomingCallRequest extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () async {
+
+                            print("CalCutgya");
                             global.showOnlyLoaderDialog(context);
-                                          FlutterRingtonePlayer.stop();
+                            try{
+                              FlutterRingtonePlayer.stop();
+                              print("CalCutgya1");
+                            }catch(e){
+                              print("WWwW$e");
+                            }
+                            FlutterRingtonePlayer.stop();
                             await callController.rejectedCall(callId);
               
                             global.callOnFcmApiSendPushNotifications(fcmTokem: [fcmToken], title: 'Reject call request from astrologer');

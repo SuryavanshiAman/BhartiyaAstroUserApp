@@ -26,17 +26,12 @@ import 'package:BharatiyAstro/views/live_astrologer/live_astrologer_screen.dart'
 import 'package:BharatiyAstro/views/loginScreen.dart';
 import 'package:BharatiyAstro/views/splashScreen.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
-// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:get/get.dart';
 import 'package:google_translator/google_translator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,11 +61,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     var messageData;
     if (message.data['body'] != null) {
       messageData = json.decode((message.data['body']));
+      print("AmanSata$messageData");
     }
     if (message.notification!.title == "For starting the timer in other audions for video and audio") {
       print('_firebaseMessagingBackgroundHandler For starting the timer in other audions for video and audio');
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu1"});
       });
       if (liveController.isImInLive == true) {
         print("waitListId for 3rd users:" + message.data.toString());
@@ -91,6 +88,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } else if (message.notification!.title == "For Live accept/reject") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu2"});
       });
       if (liveController.isImInLive == true) {
         String astroName = message.data["astroName"];
@@ -123,6 +121,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } else if (message.notification!.title == "For accepting time while user already splitted") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu3"});
       });
       print("waitListId for 3rd users:" + message.data.toString());
       int timeInInt = int.parse(message.data["timeInInt"].toString());
@@ -135,6 +134,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } else if (message.notification!.title == "Notification for customer support status update") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+
       });
       var message1 = jsonDecode(message.data['body']);
       if (customerSupportController.isIn) {
@@ -144,6 +144,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } else if (message.notification!.title == "End chat from astrologer") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu5"});
       });
       chatController.showBottomAcceptChat = false;
       global.sp = await SharedPreferences.getInstance();
@@ -154,7 +155,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       chatController.update();
     } else if (message.notification!.title == "Astrologer Leave call") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
-        await _localNotifications.cancelAll();
+        await _localNotifications.cancelAll();print({"manu6"});
       });
       callController.showBottomAcceptCall = false;
       global.sp!.remove('callBottom');
@@ -171,6 +172,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       } else {
         Future.delayed(Duration(milliseconds: 500)).then((value) async {
           await _localNotifications.cancelAll();
+
         });
       }
     } else if (messageData['notificationType'] == 3) {
@@ -186,25 +188,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } else if (messageData['notificationType'] == 1) {
       print('fcmtoken for call:- ${messageData["fcmToken"]}');
 
-      // callController.showBottomAcceptCallRequest(
-      //   channelName: messageData["channelName"] ?? "",
-      //   astrologerId: messageData["astrologerId"] ?? 0,
-      //   callId: messageData["callId"],
-      //   token: messageData["token"] ?? "",
-      //   astroName: messageData["astrologerName"] ?? "Astrologer",
-      //   astroProfile: messageData["profile"] ?? "",
-      //   fcmToken: messageData["fcmToken"] ?? "",
-      //   isBackGround: true,
-      // );
+      callController.showBottomAcceptCallRequest(
+        channelName: messageData["channelName"] ?? "",
+        astrologerId: messageData["astrologerId"] ?? 0,
+        callId: messageData["callId"],
+        token: messageData["token"] ?? "",
+        astroName: messageData["astrologerName"] ?? "Astrologer",
+        astroProfile: messageData["profile"] ?? "",
+        fcmToken: messageData["fcmToken"] ?? "",
+        isBackGround: true,
+      );
     } else if (messageData['notificationType'] == 14) {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu8"});
       });
       await bottomController.getLiveAstrologerList();
     }
   } else {
     Future.delayed(Duration(milliseconds: 500)).then((value) async {
       await _localNotifications.cancelAll();
+      print({"manu9"});
     });
   }
 }
@@ -502,6 +506,7 @@ class _MyAppState extends State<MyApp> {
               );
                  Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu10"});
       });
             } else if (messageData['notificationType'] == 1) {
               //     print('fcmtoken for call:- ${messageData["fcmToken"]}');
@@ -517,6 +522,7 @@ class _MyAppState extends State<MyApp> {
                   isBackGround: false);
                      Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
+        print({"manu11"});
       });
             } else if (messageData['notificationType'] == 4) {
               print('live astrologer $messageData');
@@ -622,7 +628,6 @@ class _MyAppState extends State<MyApp> {
         Map<dynamic, dynamic> body;
         body = jsonDecode(messageData['body']);
         if (body["notificationType"] == 1) {
-
           Get.to(() => IncomingCallRequest(
                 astrologerId: body["astrologerId"],
                 astrologerName: body["astrologerName"] == null ? "Astrologer" : body["astrologerName"],

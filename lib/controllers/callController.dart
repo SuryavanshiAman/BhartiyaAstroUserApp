@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:BharatiyAstro/controllers/bottomNavigationController.dart';
 import 'package:BharatiyAstro/controllers/notificationController.dart';
 import 'package:BharatiyAstro/utils/services/api_helper.dart';
-import 'package:BharatiyAstro/views/call/accept_call_screen.dart';
-// import 'package:awesome_notifications/awesome_notifications.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
@@ -66,8 +66,9 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     await global.sp!.setInt('bottomCallId', callId);
     await global.sp!.setString('bottomCallFcmToken', fcmToken);
     await global.sp!.setString('bottomCallChannel', channelName);
-    FlutterRingtonePlayer.playRingtone(asAlarm: false);
     FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
+    FlutterRingtonePlayer.playRingtone(asAlarm: false);
+
     NoticationController notificationController = Get.put(NoticationController());
     // log("Availibilty=============================================================${bottomNavigationController.astrologerbyId[0].name}");
     update();
@@ -292,12 +293,16 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
         if (result) {
           await apiHelper.rejectCall(callId).then((result) {
             if (result.status == "200") {
+              print("CalCutgya2");
+              FlutterRingtonePlayer.stop();
               global.showToast(
                 message: 'Call Rejected',
                 textColor: global.textColor,
                 bgColor: global.toastBackGoundColor,
               );
             } else {
+              FlutterRingtonePlayer.stop();
+              print("CalCutgya3");
               global.showToast(
                 message: 'Call Reject fail',
                 textColor: global.textColor,

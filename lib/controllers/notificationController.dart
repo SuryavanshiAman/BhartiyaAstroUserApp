@@ -9,6 +9,7 @@ import 'package:BharatiyAstro/utils/global.dart' as global;
 class NoticationController extends GetxController {
 
   showChatNotification(String profileImage, String name, Function accept) {
+
     Get.showSnackbar(GetSnackBar(
       backgroundColor: Colors.transparent,
           animationDuration: Duration(milliseconds: 500),
@@ -121,6 +122,7 @@ class NoticationController extends GetxController {
 
 
     showCallNotification(String profileImage, String name, Function accept) {
+    print("Aman");
     Get.showSnackbar(GetSnackBar(
       backgroundColor: Colors.transparent,
       snackPosition: SnackPosition.TOP,
@@ -212,6 +214,7 @@ class NoticationController extends GetxController {
                               ),
                             ),
                             onPressed: () {
+                              FlutterRingtonePlayer.stop();
                                     accept();
                               Get.back();
                         
