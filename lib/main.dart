@@ -16,11 +16,8 @@ import 'package:BharatiyAstro/l10n/l10n.dart';
 import 'package:BharatiyAstro/theme/nativeTheme.dart';
 import 'package:BharatiyAstro/utils/binding/networkBinding.dart';
 import 'package:BharatiyAstro/utils/global.dart' as global;
-import 'package:BharatiyAstro/views/CheckPayment.dart';
-// import 'package:BharatiyAstro/views/VideoCall/VideoCallScreen.dart';
 import 'package:BharatiyAstro/views/astrologerProfile/astrologerProfile.dart';
 import 'package:BharatiyAstro/views/call/incoming_call_request.dart';
-import 'package:BharatiyAstro/views/chat/chat_screen.dart';
 import 'package:BharatiyAstro/views/chat/incoming_chat_request.dart';
 import 'package:BharatiyAstro/views/live_astrologer/live_astrologer_screen.dart';
 import 'package:BharatiyAstro/views/loginScreen.dart';
@@ -32,13 +29,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:get/get.dart';
 import 'package:google_translator/google_translator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'controllers/VedioCallController.dart';
-import 'views/call/accept_call_screen.dart';
-
 class PostHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(context) {
@@ -187,6 +182,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       // );
     } else if (messageData['notificationType'] == 1) {
       print('fcmtoken for call:- ${messageData["fcmToken"]}');
+      print('😁😁😁😁');
+/// call notification come this will active
 
       callController.showBottomAcceptCallRequest(
         channelName: messageData["channelName"] ?? "",
@@ -197,6 +194,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         astroProfile: messageData["profile"] ?? "",
         fcmToken: messageData["fcmToken"] ?? "",
         isBackGround: true,
+        isSoundOn:true,
       );
     } else if (messageData['notificationType'] == 14) {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
@@ -261,7 +259,7 @@ void main() async {
   //       importance: NotificationImportance.High,
   //       channelShowBadge: true, // Show badge when the notification arrives
   //       // Allow the notification to bypass Do Not Disturb mode
-  //       locked: true, 
+  //       locked: true,
   //       criticalAlerts: true
 
   //       // defaultRingtoneType: DefaultRingtoneType.Ringtone
@@ -510,7 +508,7 @@ class _MyAppState extends State<MyApp> {
       });
             } else if (messageData['notificationType'] == 1) {
               //     print('fcmtoken for call:- ${messageData["fcmToken"]}');
-
+              print('😆😆😆😆😆');
               callController.showBottomAcceptCallRequest(
                   channelName: messageData["channelName"] ?? "",
                   astrologerId: messageData["astrologerId"] ?? 0,
@@ -561,7 +559,10 @@ class _MyAppState extends State<MyApp> {
       }
     });
     //Perform On Tap Operation On Notification Click when app is in backgroud Or in Kill Mode
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    FlutterRingtonePlayer.stop();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      print("👍👍👍👍");
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       onSelectNotification(json.encode(message.data));
     });
     FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -571,7 +572,8 @@ class _MyAppState extends State<MyApp> {
         global.generalPayload = json.encode(message.data);
         print('${global.generalPayload.toString()}');
       }
-    });
+    });});
+
   }
 
   Future<void> foregroundNotification(RemoteMessage payload) async {
@@ -600,6 +602,7 @@ class _MyAppState extends State<MyApp> {
       priority: Priority.high,
       icon: "@mipmap/ic_launcher",
       playSound: true,
+      // sound: RawResourceAndroidNotificationSound('asset/sound/notification.mp3'),
     );
     const DarwinNotificationDetails iOSDetails = DarwinNotificationDetails();
 

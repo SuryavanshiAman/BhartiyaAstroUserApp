@@ -13,7 +13,7 @@ import '../../controllers/bottomNavigationController.dart';
 import '../bottomNavigationBarScreen.dart';
 
 // ignore: must_be_immutable
-class IncomingCallRequest extends StatelessWidget {
+class IncomingCallRequest extends StatefulWidget {
   final String? astrologerName;
   final String? astrologerProfile;
   final int astrologerId;
@@ -31,10 +31,43 @@ class IncomingCallRequest extends StatelessWidget {
       required this.astrologerId,
       required this.token,
       required this.channel});
+
+  @override
+  State<IncomingCallRequest> createState() => _IncomingCallRequestState();
+}
+
+class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsBindingObserver{
   CallController callController = Get.find<CallController>();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this); // Add observer to track lifecycle changes
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Remove observer when disposing
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.paused) {
+      // App goes to background
+      print("App is in the background");
+      // Stop the sound when app is paused (background)
+    } else if (state == AppLifecycleState.resumed) {
+      // App returns to foreground
+    print("🤣🤣");
+      print("App is in the foreground");
+    // FlutterRingtonePlayer.stop();
+      FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"); // Play sound again if needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    print("👌👌👌👌👌");
     return SafeArea(
         child: WillPopScope(
       onWillPop: () async {
@@ -60,7 +93,7 @@ class IncomingCallRequest extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: Get.theme.primaryColor,
                           radius: 50,
-                          child: astrologerProfile == ""
+                          child: widget.astrologerProfile == ""
                               ? Image.asset(
                                   Images.deafultUser,
                                   fit: BoxFit.fill,
@@ -68,7 +101,7 @@ class IncomingCallRequest extends StatelessWidget {
                                   width: 40,
                                 )
                               : CachedNetworkImage(
-                                  imageUrl: '${global.imgBaseurl}$astrologerProfile',
+                                  imageUrl: '${global.imgBaseurl}${widget.astrologerProfile}',
                                   imageBuilder: (context, imageProvider) => CircleAvatar(
                                     radius: 48,
                                     backgroundImage: imageProvider,
@@ -86,7 +119,7 @@ class IncomingCallRequest extends StatelessWidget {
                           height: 15,
                         ),
                         Text(
-                          astrologerName == null || astrologerName == "" ? "Astrologer" : astrologerName ?? "Astrologer",
+                          widget.astrologerName == null || widget.astrologerName == "" ? "Astrologer" : widget.astrologerName ?? "Astrologer",
                           style: Get.textTheme.headline5,
                         ),
                       ],
@@ -136,15 +169,17 @@ class IncomingCallRequest extends StatelessWidget {
                             print("CalCutgya");
                             global.showOnlyLoaderDialog(context);
                             try{
-                              FlutterRingtonePlayer.stop();
+                              setState(() {
+                                FlutterRingtonePlayer.stop();
+                              });
+
                               print("CalCutgya1");
                             }catch(e){
                               print("WWwW$e");
                             }
-                            FlutterRingtonePlayer.stop();
-                            await callController.rejectedCall(callId);
-              
-                            global.callOnFcmApiSendPushNotifications(fcmTokem: [fcmToken], title: 'Reject call request from astrologer');
+                            await callController.rejectedCall(widget.callId);
+
+                            global.callOnFcmApiSendPushNotifications(fcmTokem: [widget.fcmToken], title: 'Reject call request from astrologer');
                             global.hideLoader();
                             BottomNavigationController bottomNavigationController = Get.find<BottomNavigationController>();
                             bottomNavigationController.setIndex(0, 0);
@@ -165,20 +200,68 @@ class IncomingCallRequest extends StatelessWidget {
                             ),
                           ),
                         ),
+                        // InkWell(
+                        //   onTap: () async {
+                        //     try {
+                        //       retryStopRingtone();
+                        //     } catch (e) {
+                        //       print("Initial stop failed, retrying after delay: $e");
+                        //     }
+                        //
+                        //     await Future.delayed(Duration(milliseconds: 200));
+                        //     try {
+                        //       retryStopRingtone();
+                        //     } catch (e) {
+                        //       print("Delayed stop attempt failed: $e");
+                        //     }
+                        //
+                        //     global.showOnlyLoaderDialog(context);
+                        //     try {
+                        //       await callController.rejectedCall(callId);
+                        //       global.callOnFcmApiSendPushNotifications(
+                        //         fcmTokem: [fcmToken],
+                        //         title: 'Reject call request from astrologer',
+                        //       );
+                        //     } catch (e) {
+                        //       print("Error rejecting call: $e");
+                        //     } finally {
+                        //       global.hideLoader();
+                        //       BottomNavigationController bottomNavigationController = Get.find<BottomNavigationController>();
+                        //       bottomNavigationController.setIndex(0, 0);
+                        //       Get.to(() => BottomNavigationBarScreen(index: 0));
+                        //     }
+                        //   },
+                        //   child: Container(
+                        //     padding: const EdgeInsets.all(10),
+                        //     margin: const EdgeInsets.only(right: 20),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.red,
+                        //       borderRadius: BorderRadius.circular(30),
+                        //     ),
+                        //     child: Icon(
+                        //       Icons.phone,
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
+                        // ),
+
                         InkWell(
                           onTap: () async {
                             global.showOnlyLoaderDialog(context);
-                             FlutterRingtonePlayer.stop();
-                            await callController.acceptedCall(callId);
+                            setState(() {
+                              FlutterRingtonePlayer.stop();
+                            });
+
+                            await callController.acceptedCall(widget.callId);
                             global.hideLoader();
-                           
+
                             Get.to(() => AcceptCallScreen(
-                                  astrologerId: astrologerId,
-                                  astrologerName: astrologerName == null || astrologerName == "" ? "Astrologer" : astrologerName ?? "Astrologer",
-                                  astrologerProfile: astrologerProfile,
-                                  token: token,
-                                  callChannel: channel,
-                                  callId: callId,
+                                  astrologerId: widget.astrologerId,
+                                  astrologerName: widget.astrologerName == null || widget.astrologerName == "" ? "Astrologer" : widget.astrologerName ?? "Astrologer",
+                                  astrologerProfile: widget.astrologerProfile,
+                                  token: widget.token,
+                                  callChannel: widget.channel,
+                                  callId: widget.callId,
                                 ));
                           },
                           child: Container(

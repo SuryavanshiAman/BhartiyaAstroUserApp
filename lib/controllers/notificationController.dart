@@ -122,6 +122,7 @@ class NoticationController extends GetxController {
 
 
     showCallNotification(String profileImage, String name, Function accept) {
+    print("✌✌✌✌✌");
     print("Aman");
     Get.showSnackbar(GetSnackBar(
       backgroundColor: Colors.transparent,
@@ -197,6 +198,14 @@ class NoticationController extends GetxController {
                               ),
                             ),
                             onPressed: () {
+                              print("  😎😎😎😎");
+
+                              try{
+                                FlutterRingtonePlayer.stop();
+                                print("CalCutgya1");
+                              }catch(e){
+                                print("WWwW$e");
+                              }
                               FlutterRingtonePlayer.stop();
                               Get.back();
                               // ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -214,6 +223,13 @@ class NoticationController extends GetxController {
                               ),
                             ),
                             onPressed: () {
+                              print("🤦‍♂️🤦‍♂️🤦‍♂️");
+                              try{
+                                FlutterRingtonePlayer.stop();
+                                print("CalCutgya1");
+                              }catch(e){
+                                print("WWwW$e");
+                              }
                               FlutterRingtonePlayer.stop();
                                     accept();
                               Get.back();

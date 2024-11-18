@@ -61,6 +61,8 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     inIt();
+
+    print("🎶🎶🎶🎶");
     super.onInit();
   }
 
@@ -88,6 +90,7 @@ class SplashController extends GetxController {
             if (result) {
               await apiHelper.validateSession().then((result) async {
                 if (result.status == "200") {
+                  print("data aya");
                   currentUser = result.recordList;
                   global.saveUser(currentUser!);
                   global.user = currentUser!;
@@ -100,6 +103,7 @@ class SplashController extends GetxController {
 
                     Get.off(() => BottomNavigationBarScreen(index: 0));
                 } else {
+                  print("data nahiaya");
                   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
                     version = packageInfo.version;
                     update();
@@ -112,6 +116,7 @@ class SplashController extends GetxController {
             }
           });
         } else {
+          print("data nahiaya");
           PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
             version = packageInfo.version;
             update();

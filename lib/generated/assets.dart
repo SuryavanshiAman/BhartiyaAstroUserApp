@@ -71,5 +71,6 @@ class Assets {
   static const String imagesWhatsapp = 'assets/images/whatsapp.png';
   static const String imagesYoutube = 'assets/images/youtube.png';
   static const String soundMusic = 'assets/sound/music.mp3';
+  static const String soundNotification = 'assets/sound/notification.mp3';
 
 }

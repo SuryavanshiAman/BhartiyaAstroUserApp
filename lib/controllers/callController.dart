@@ -48,6 +48,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     required String astroProfile,
     required String token,
     bool isBackGround = true,
+    bool isSoundOn = true,
   }) async {
     print('in callcontroller showBottomAcceptCallRequest');
     showBottomAcceptCall = true;
@@ -66,13 +67,22 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     await global.sp!.setInt('bottomCallId', callId);
     await global.sp!.setString('bottomCallFcmToken', fcmToken);
     await global.sp!.setString('bottomCallChannel', channelName);
-    FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
+    //
+    // FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
     FlutterRingtonePlayer.playRingtone(asAlarm: false);
-
+    if(isSoundOn){
+      print("👀👀👀");
+      FlutterRingtonePlayer.play(fromAsset: "assets/sound/notification.mp3");
+      print("👀👀👀");
+    }else{
+      FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
+    }
     NoticationController notificationController = Get.put(NoticationController());
     // log("Availibilty=============================================================${bottomNavigationController.astrologerbyId[0].name}");
     update();
     if (!isBackGround) {
+
+      print("😊😊😊");
       Get.to(() => IncomingCallRequest(
             astrologerId: bottomAstrologerId ?? 0,
             callId: bottomCallId ?? 0,
@@ -272,6 +282,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
         if (result) {
           await apiHelper.acceptCall(callId).then((result) {
             if (result.status == "200") {
+              FlutterRingtonePlayer.stop();
             } else {
               global.showToast(
                 message: 'Call Accepet fail',
@@ -295,12 +306,13 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
             if (result.status == "200") {
               print("CalCutgya2");
               FlutterRingtonePlayer.stop();
+              print("CalCutgya2.0");
               global.showToast(
                 message: 'Call Rejected',
                 textColor: global.textColor,
                 bgColor: global.toastBackGoundColor,
               );
-            } else {
+            } else { print("CalCutgya3.0");
               FlutterRingtonePlayer.stop();
               print("CalCutgya3");
               global.showToast(
