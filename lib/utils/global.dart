@@ -95,7 +95,12 @@ int? localUid;
 int? localLiveUid;
 int? localLiveUid2;
 bool isHost = false;
-Future<bool> callOnFcmApiSendPushNotifications({List<String?>? fcmTokem, String? title, String? subTitle, sendData,String?notificationType}) async {
+Future<bool> callOnFcmApiSendPushNotifications(
+    {List<String?>? fcmTokem,
+    String? title,
+    String? subTitle,
+    sendData,
+    String? notificationType}) async {
   try {
     String postUrl = 'https://fcm.googleapis.com/fcm/send';
     final data = {
@@ -104,7 +109,7 @@ Future<bool> callOnFcmApiSendPushNotifications({List<String?>? fcmTokem, String?
         "title": title,
         "body": subTitle,
         "sound": "default",
-        "color": "#ff3296fa", 
+        "color": "#ff3296fa",
         "vibrate": "300",
         "priority": 'high',
         "content_available": 'true',
@@ -116,16 +121,20 @@ Future<bool> callOnFcmApiSendPushNotifications({List<String?>? fcmTokem, String?
           "color": '#ff3296fa',
           "clickAction": 'FLUTTER_NOTIFICATION_CLICK',
           "content_available": 'true',
-          "notificationType": notificationType??'52',
+          "notificationType": notificationType ?? '52',
         },
       },
       "data": sendData
     };
     final headers = {
       'content-type': 'application/json',
-      'Authorization': 'key=AAAAmwRvEy0:APA91bE_lDUJ8Llz9Y9QsWxp2pITgnjwNOeZ84U-GeWrCu99xT_SCXinqrCWMObYQiaMBMwtu9bMHdZhyD1G0g2HKgl_KEJqQpPzdcyfudZD-QERgFWaVDAMj3THPn1EOrMy2mDIXBTU' // 'key=YOUR_SERVER_KEY'
+      'Authorization':
+          'key=AAAAmwRvEy0:APA91bE_lDUJ8Llz9Y9QsWxp2pITgnjwNOeZ84U-GeWrCu99xT_SCXinqrCWMObYQiaMBMwtu9bMHdZhyD1G0g2HKgl_KEJqQpPzdcyfudZD-QERgFWaVDAMj3THPn1EOrMy2mDIXBTU' // 'key=YOUR_SERVER_KEY'
     };
-    final response = await http.post(Uri.parse(postUrl), body: json.encode(data), encoding: Encoding.getByName('utf-8'), headers: headers);
+    final response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data),
+        encoding: Encoding.getByName('utf-8'),
+        headers: headers);
     if (response.statusCode == 200) {
       // on success do sth
       print('Send');
@@ -136,7 +145,8 @@ Future<bool> callOnFcmApiSendPushNotifications({List<String?>? fcmTokem, String?
       return false;
     }
   } catch (e) {
-    print("Exception -  global.dart - callOnFcmApiSendPushNotifications(): ${e.toString()}");
+    print(
+        "Exception -  global.dart - callOnFcmApiSendPushNotifications(): ${e.toString()}");
     return false;
   }
 }
@@ -156,13 +166,16 @@ class MaskedTextInputFormatter extends TextInputFormatter {
   }
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.length > 0) {
       if (newValue.text.length > oldValue.text.length) {
         if (newValue.text.length > mask.length) return oldValue;
-        if (newValue.text.length < mask.length && mask[newValue.text.length - 1] == separator) {
+        if (newValue.text.length < mask.length &&
+            mask[newValue.text.length - 1] == separator) {
           return TextEditingValue(
-            text: '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
+            text:
+                '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
             selection: TextSelection.collapsed(
               offset: newValue.selection.end + 1,
             ),
@@ -176,7 +189,8 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 
 class CardNumberInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -193,7 +207,9 @@ class CardNumberInputFormatter extends TextInputFormatter {
     }
 
     var string = buffer.toString();
-    return newValue.copyWith(text: string, selection: new TextSelection.collapsed(offset: string.length));
+    return newValue.copyWith(
+        text: string,
+        selection: new TextSelection.collapsed(offset: string.length));
   }
 }
 
@@ -204,7 +220,8 @@ String getCleanedNumber(String text) {
 
 class CardMonthInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     var newText = newValue.text;
     if (newValue.selection.baseOffset == 0) {
       return newValue;
@@ -218,7 +235,9 @@ class CardMonthInputFormatter extends TextInputFormatter {
       }
     }
     var string = buffer.toString();
-    return newValue.copyWith(text: string, selection: TextSelection.collapsed(offset: string.length));
+    return newValue.copyWith(
+        text: string,
+        selection: TextSelection.collapsed(offset: string.length));
   }
 }
 
@@ -260,7 +279,8 @@ bool hasMonthPassed(int year, int month) {
   // 1. The year is in the past. In that case, we just assume that the month
   // has passed
   // 2. Card's month (plus another month) is more than current month.
-  return hasYearPassed(year) || convertYearTo4Digits(year) == now.year && (month < now.month + 1);
+  return hasYearPassed(year) ||
+      convertYearTo4Digits(year) == now.year && (month < now.month + 1);
 }
 
 //Strip implement finish
@@ -272,21 +292,25 @@ Future<void> createAndShareLinkForHistoryChatCall() async {
     String applink;
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://bharatiyastro.com/',
-      link: Uri.parse("https://bharatiyastro.com/userProfile?screen=historyCallChat"),
+      link: Uri.parse(
+          "https://bharatiyastro.com/userProfile?screen=historyCallChat"),
       androidParameters: AndroidParameters(
         packageName: 'com.bharatiyastro.userapp',
         minimumVersion: 1,
       ),
     );
     Uri url;
-    final ShortDynamicLink shortLink = await dynamicLinks.buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
+    final ShortDynamicLink shortLink = await dynamicLinks
+        .buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
     url = shortLink.shortUrl;
     appShareLink = url.toString();
     applink = appShareLink;
     hideLoader();
     await FlutterShare.share(
-      title: 'Check my call on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} app. You should also try and see your future. First call is free',
-      text: 'Check my call on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} app. You should also try and see your future. First call is free',
+      title:
+          'Check my call on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} app. You should also try and see your future. First call is free',
+      text:
+          'Check my call on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} app. You should also try and see your future. First call is free',
       linkUrl: '$applink',
     );
   } catch (e) {
@@ -301,21 +325,25 @@ Future<void> createAndShareTrackPlanet() async {
     String applink;
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://bharatiyastro.com',
-      link: Uri.parse("https://bharatiyastro.com/userProfile?screen=trackPlanet"),
+      link:
+          Uri.parse("https://bharatiyastro.com/userProfile?screen=trackPlanet"),
       androidParameters: AndroidParameters(
         packageName: 'com.BharatiyAstro.app',
         minimumVersion: 1,
       ),
     );
     Uri url;
-    final ShortDynamicLink shortLink = await dynamicLinks.buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
+    final ShortDynamicLink shortLink = await dynamicLinks
+        .buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
     url = shortLink.shortUrl;
     appShareLink = url.toString();
     applink = appShareLink;
     hideLoader();
     await FlutterShare.share(
-      title: 'The movement of our planets in the sky impact our lives daily. Now track every movement of your planets on BharatiyAstro for FREE!',
-      text: 'The movement of our planets in the sky impact our lives daily. Now track every movement of your planets on BharatiyAstro for FREE!',
+      title:
+          'The movement of our planets in the sky impact our lives daily. Now track every movement of your planets on BharatiyAstro for FREE!',
+      text:
+          'The movement of our planets in the sky impact our lives daily. Now track every movement of your planets on BharatiyAstro for FREE!',
       linkUrl: '$applink',
     );
   } catch (e) {
@@ -337,7 +365,8 @@ Future<void> createAndShareLinkForBloog(String title) async {
       ),
     );
     Uri url;
-    final ShortDynamicLink shortLink = await dynamicLinks.buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
+    final ShortDynamicLink shortLink = await dynamicLinks
+        .buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
     url = shortLink.shortUrl;
     appShareLink = url.toString();
     applink = appShareLink;
@@ -359,14 +388,16 @@ Future<void> createAndShareAstroProfile(ScreenshotController sc) async {
     String applink;
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://bharatiyastro.com',
-      link: Uri.parse("https://bharatiyastro.com/userProfile?screen=astroProfile"),
+      link: Uri.parse(
+          "https://bharatiyastro.com/userProfile?screen=astroProfile"),
       androidParameters: AndroidParameters(
         packageName: 'com.BharatiyAstro.app',
         minimumVersion: 1,
       ),
     );
     Uri url;
-    final ShortDynamicLink shortLink = await dynamicLinks.buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
+    final ShortDynamicLink shortLink = await dynamicLinks
+        .buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
     url = shortLink.shortUrl;
     appShareLink = url.toString();
     applink = appShareLink;
@@ -388,7 +419,13 @@ shareAstroProfile(String appShareLink, ScreenshotController sc) async {
           final temp = await getExternalStorageDirectory();
           final path = '${temp!.path}/$fileName.jpg';
           File(path).writeAsBytesSync(image);
-          await FlutterShare.shareFile(filePath: path, title: '${getSystemFlagValueForLogin(systemFlagNameList.appName)}', text: "$appShareLink").then((value) {}).catchError((e) {
+          await FlutterShare.shareFile(
+                  filePath: path,
+                  title:
+                      '${getSystemFlagValueForLogin(systemFlagNameList.appName)}',
+                  text: "$appShareLink")
+              .then((value) {})
+              .catchError((e) {
             print(e);
             // showCustomSnackBar(e.toString());
           });
@@ -406,14 +443,16 @@ createAndShareLinkForDailyHorscope(ScreenshotController sc) async {
   String applink;
   final DynamicLinkParameters parameters = DynamicLinkParameters(
     uriPrefix: 'https://bharatiyastro.com',
-    link: Uri.parse("https://bharatiyastro.com/userProfile?screen=dailyHorscope"),
+    link:
+        Uri.parse("https://bharatiyastro.com/userProfile?screen=dailyHorscope"),
     androidParameters: AndroidParameters(
       packageName: 'com.BharatiyAstro.app',
       minimumVersion: 1,
     ),
   );
   Uri url;
-  final ShortDynamicLink shortLink = await dynamicLinks.buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
+  final ShortDynamicLink shortLink = await dynamicLinks
+      .buildShortLink(parameters, shortLinkType: ShortDynamicLinkType.short);
   url = shortLink.shortUrl;
   appShareLink = url.toString();
   applink = appShareLink;
@@ -435,7 +474,14 @@ createAndShareLinkForDailyHorscope(ScreenshotController sc) async {
           //final temp = await getExternalStorageDirectory();
           final path = '${temp!.path}/$fileName.jpg';
           File(path).writeAsBytesSync(image);
-          await FlutterShare.shareFile(filePath: path, title: '${getSystemFlagValueForLogin(systemFlagNameList.appName)}', text: "Check out your free daily horoscope on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} & plan your day batter $appShareLink").then((value) {}).catchError((e) {
+          await FlutterShare.shareFile(
+                  filePath: path,
+                  title:
+                      '${getSystemFlagValueForLogin(systemFlagNameList.appName)}',
+                  text:
+                      "Check out your free daily horoscope on ${global.getSystemFlagValue(global.systemFlagNameList.appName)} & plan your day batter $appShareLink")
+              .then((value) {})
+              .catchError((e) {
             print(e);
           });
         }
@@ -451,7 +497,8 @@ abstract class DateFormatter {
     if (timestamp == null) {
       return null;
     }
-    String date = "${timestamp.day} ${DateFormat('MMMM').format(timestamp)} ${timestamp.year}";
+    String date =
+        "${timestamp.day} ${DateFormat('MMMM').format(timestamp)} ${timestamp.year}";
     return date;
   }
 
@@ -496,7 +543,12 @@ showOnlyLoaderDialog(context) {
 }
 
 showSnackBar(String title, String text, {Duration? duration}) {
-  return Get.snackbar(title, text, dismissDirection: DismissDirection.horizontal, showProgressIndicator: true, isDismissible: true, duration: duration != null ? duration : Duration(seconds: 2), snackPosition: SnackPosition.BOTTOM);
+  return Get.snackbar(title, text,
+      dismissDirection: DismissDirection.horizontal,
+      showProgressIndicator: true,
+      isDismissible: true,
+      duration: duration != null ? duration : Duration(seconds: 2),
+      snackPosition: SnackPosition.BOTTOM);
 }
 
 void hideLoader() {
@@ -574,7 +626,9 @@ Future<bool> checkBody() async {
 //check login
 Future<bool> isLogin() async {
   sp = await SharedPreferences.getInstance();
-  if (sp!.getString("token") == null && sp!.getInt("currentUserId") == null && currentUserId == null) {
+  if (sp!.getString("token") == null &&
+      sp!.getInt("currentUserId") == null &&
+      currentUserId == null) {
     Get.to(() => LoginScreen());
     return false;
   } else {
@@ -645,23 +699,32 @@ String getAppVersion() {
     appVersion = packageInfo.version;
   });
   return appVersion;
-} 
+}
 
 String getSystemFlagValue(String flag) {
-  String value = splashController.currentUser!.systemFlagList!.firstWhere((e) => e.name == flag).value;
+  String value = splashController.currentUser!.systemFlagList!
+      .firstWhere((e) => e.name == flag)
+      .value;
   log('hello from getValue flag-$flag  $value');
-  return splashController.currentUser!.systemFlagList!.firstWhere((e) => e.name == flag).value;
+  return splashController.currentUser!.systemFlagList!
+      .firstWhere((e) => e.name == flag)
+      .value;
 }
 
 String getSystemFlagValueForLogin(String flag) {
-  String value = splashController.syatemFlag.firstWhere((e) => e.name == flag).value;
+  String value =
+      splashController.syatemFlag.firstWhere((e) => e.name == flag).value;
   // log('hello from getSystemFlagValueForLogin flag-$flag  $value');
   return splashController.syatemFlag.firstWhere((e) => e.name == flag).value;
 }
 
-showToast({required String message, required Color textColor, required Color bgColor}) async {
+showToast(
+    {required String message,
+    required Color textColor,
+    required Color bgColor}) async {
   log('===================================>${message}');
-  var translation = await translator.translate(message, to: splashController.currentLanguageCode);
+  var translation = await translator.translate(message,
+      to: splashController.currentLanguageCode);
   return Fluttertoast.showToast(
     msg: translation.text,
     toastLength: Toast.LENGTH_SHORT,
@@ -674,13 +737,16 @@ showToast({required String message, required Color textColor, required Color bgC
 }
 
 Future<String> translatedText(String text) async {
-  var textTranslation = await translator.translate(text, to: splashController.currentLanguageCode);
+  var textTranslation = await translator.translate(text,
+      to: splashController.currentLanguageCode);
   return textTranslation.text;
 }
 
-Future<Widget> showHtml({required String html, Map<String, Style>? style}) async {
+Future<Widget> showHtml(
+    {required String html, Map<String, Style>? style}) async {
   try {
-    var translation = await translator.translate(html, to: splashController.currentLanguageCode);
+    var translation = await translator.translate(html,
+        to: splashController.currentLanguageCode);
     return Html(
       data: translation.text,
       style: style ?? {},
@@ -693,16 +759,20 @@ Future<Widget> showHtml({required String html, Map<String, Style>? style}) async
   }
 }
 
-Future<BottomNavigationBarItem> showBottom({required String text, required Widget widget}) async {
-  var translation = await translator.translate(text, to: splashController.currentLanguageCode);
+Future<BottomNavigationBarItem> showBottom(
+    {required String text, required Widget widget}) async {
+  var translation = await translator.translate(text,
+      to: splashController.currentLanguageCode);
   return BottomNavigationBarItem(
     icon: widget,
     label: global.translatedText(translation.text).toString(),
   );
 }
 
-Future<InputDecoration> showDecorationHint({required String hint, InputBorder? inputBorder}) async {
-  var translation = await translator.translate(hint, to: splashController.currentLanguageCode);
+Future<InputDecoration> showDecorationHint(
+    {required String hint, InputBorder? inputBorder}) async {
+  var translation = await translator.translate(hint,
+      to: splashController.currentLanguageCode);
   return InputDecoration(hintText: translation.text, border: inputBorder);
 }
 

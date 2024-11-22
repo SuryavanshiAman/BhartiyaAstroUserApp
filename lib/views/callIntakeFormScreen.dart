@@ -440,7 +440,9 @@ class CallIntakeFormScreen extends StatelessWidget {
                 global.showOnlyLoaderDialog(context);
                 await callIntakeController.addCallIntakeFormData();
                 print('firebase ${astrologerId}_${global.user.id}');
-                if (isFreeAvailable == true) {
+                // if (isFreeAvailable == true)
+                if (isFreeAvailable == false)
+                {
                   await intakeController.checkFreeSessionAvailable();
                   if (intakeController.isAddNewRequestByFreeuser == true) {
                     if (type == "VideoCall") {
@@ -449,7 +451,8 @@ class CallIntakeFormScreen extends StatelessWidget {
                     }
                     if (type == "Call") {
                       await callController.sendCallRequest(astrologerId, true);
-                    } else if (type == "Chat") {
+                    }
+                    else if (type == "Chat") {
                       ChatController chatController = Get.find<ChatController>();
                       DropDownController dropDownController = Get.find<DropDownController>();
                       await chatController.sendMessage('hi $astrologerName ', '${astrologerId}_${global.user.id}', astrologerId, false);
@@ -479,7 +482,8 @@ class CallIntakeFormScreen extends StatelessWidget {
                     global.showToast(
                         message: 'You can not join multiple offers at same time', textColor: global.textColor, bgColor: global.toastBackGoundColor);
                   }
-                } else {
+                }
+                else {
                   if (type == "VideoCall") {
                     print('sending video request........................');
                     await callController.sendVideoRequest(astrologerId, true);

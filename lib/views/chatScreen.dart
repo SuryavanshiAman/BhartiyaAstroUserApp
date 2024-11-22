@@ -36,6 +36,7 @@ import '../controllers/VedioCallController.dart';
 import '../controllers/razorPayController.dart';
 import '../controllers/splashController.dart';
 // import '../utils/global.dart';
+import 'free_chat_screen.dart';
 import 'profile/editUserProfileScreen.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -778,11 +779,12 @@ class TabViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     paginateTask();
     return ListView.builder(
-      itemCount: astrologerList.length,
+      itemCount:2,
       controller: chatScrollController,
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        print(astrologerList[index].chatStatus);
+        print(astrologerList[index].isFreeAvailable);
+        print("💕💕💕");
         return InkWell(
           onTap: () async {
             Get.find<ReviewController>().getReviewData(astrologerList[index].id);
@@ -1048,13 +1050,24 @@ class TabViewWidget extends StatelessWidget {
                                         }
                                       }
                                       log("   id =====================>${astrologerList[index].id}  name==============>  ${astrologerList[index].name}");
+                                      astrologerList[index].isFreeAvailable != true? await Get.to(() =>FreeChatScreen(
+                                        astrologerId: astrologerList[index].id,
+                                        chatId: 1,
+                                        astrologerName: astrologerList[index].name,
+                                        fireBasechatId: "1",
+                                        flagId: 1,
+                                        profileImage: astrologerList[index].profileImage,
+                                        fcmToken: "1",
+                                      )):
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>FreeChatScreen())):
                                       await Get.to(() => CallIntakeFormScreen(
                                             type: "Chat",
                                             astrologerId: astrologerList[index].id,
                                             astrologerName: astrologerList[index].name,
                                             astrologerProfile: astrologerList[index].profileImage,
                                             isFreeAvailable: astrologerList[index].isFreeAvailable,
-                                          ));
+                                          )
+                                      );
                                       global.hideLoader();
                                     } else if (astrologerList[index].chatStatus == "Offline") {
                                       bottomNavigationController.dialogForJoinInWaitListForListPageOnly(

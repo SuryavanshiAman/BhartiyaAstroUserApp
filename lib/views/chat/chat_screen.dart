@@ -57,15 +57,11 @@ class AcceptChatScreen extends StatefulWidget {
 
 class _AcceptChatScreenState extends State<AcceptChatScreen> {
   final TextEditingController messageController = TextEditingController();
-  final SplashController splashController =
-      Get.put<SplashController>(SplashController());
-  final BottomNavigationController bottomNavigationController =
-      Get.put<BottomNavigationController>(BottomNavigationController());
+  final SplashController splashController = Get.put<SplashController>(SplashController());
+  final BottomNavigationController bottomNavigationController = Get.put<BottomNavigationController>(BottomNavigationController());
   TimerController timerController = Get.put<TimerController>(TimerController());
-  WalletController walletController =
-      Get.put<WalletController>(WalletController());
-  final ChatController chatController =
-      Get.put<ChatController>(ChatController());
+  WalletController walletController = Get.put<WalletController>(WalletController());
+  final ChatController chatController = Get.put<ChatController>(ChatController());
   bool islowbalance = false;
   Timer? secTimer;
   double Minutetime = 0.0;

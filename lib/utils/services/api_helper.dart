@@ -283,6 +283,7 @@ class APIHelper {
             "fetchRecord": fetchRecords,
           }));
       dynamic recordList;
+      print("🤡${jsonEncode(response.body)}");
       print('json body ${json.encode({
             "userId": global.user.id,
             "astrologerCategoryId": catId,
@@ -290,7 +291,8 @@ class APIHelper {
             "sortBy": sortingKey,
             "startIndex": startIndex,
             "fetchRecord": fetchRecords,
-          })}');
+
+          })} 😓😓🤡🤡🤡🤡🤡🤡');
       // log("astrologers ============================${response.body}");
       if (response.statusCode == 200) {
         recordList = List<AstrologerModel>.from(json.decode(response.body)["recordList"].map((x) => AstrologerModel.fromJson(x)));
