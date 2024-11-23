@@ -1033,8 +1033,8 @@ class TabViewWidget extends StatelessWidget {
                                 Get.to(() => EditUserProfile());
                               }
                               else {
-                                if (astrologerList[index].charge * 5 <=
-                                    global.splashController.currentUser!.walletAmount) {
+                                if (astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount)
+                                {
 
                                   await bottomNavigationController.checkAlreadyInReq(astrologerList[index].id);
                                   if (bottomNavigationController.isUserAlreadyInChatReq == false) {

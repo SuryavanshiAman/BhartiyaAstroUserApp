@@ -10,7 +10,6 @@ import 'package:BharatiyAstro/utils/global.dart' as global;
 import 'package:BharatiyAstro/utils/images.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/index.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/chatController.dart';
@@ -40,7 +39,16 @@ class FreeChatScreen extends StatefulWidget {
 }
 
 class _FreeChatScreenState extends State<FreeChatScreen> {
+  @override
+  void initState() {
+    print("Aman");
+    Future.delayed(Duration(seconds: 2),(){
+      _startTimer();
+      _triggerReply();
+    });
 
+    super.initState();
+  }
   final List<Map<String, String>> _messages = []; // Stores all messages
   final List<String> _user1Replies = [
     "Hi there!",
@@ -65,6 +73,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
       );
     }
   }
+
   void _sendMessage(String text) {
     if (text.isEmpty) return;
 
@@ -81,13 +90,43 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
 
   void _handleReply(String userMessage) {
     // Custom validation logic for specific questions
-    if (_currentReplyIndex == 3) { // Question: "What is your gender?"
-      if (userMessage.toLowerCase() != "male" && userMessage.toLowerCase() != "female") {
+    if (_currentReplyIndex == 3) {
+      // Question: "What is your gender?"
+      if (userMessage != "male" && userMessage.toLowerCase() != "female") {
         // Send fallback reply
         setState(() {
           _messages.add({
             "sender": "User 1",
-            "message": "Sorry, I don’t get you. Please reply with 'male' or 'female'."
+            "message":
+                "Sorry, I don’t get you. Please reply with 'male' or 'female'."
+          });
+        });
+        Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
+        return;
+      }
+    }
+    if (_currentReplyIndex == 4) {
+      // Question: "What is your date of birth?"
+      if (!_isValidDate(userMessage)) {
+        setState(() {
+          _messages.add({
+            "sender": "User 1",
+            "message":
+                "Sorry, I don’t get you. Please provide your date of birth in a valid format (e.g., DD/MM/YYYY or MM-DD-YYYY)."
+          });
+        });
+        Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
+        return;
+      }
+    }
+    if (_currentReplyIndex == 5) {
+      // Question: "What is your time?"
+      if (!_isValidTime(userMessage)) {
+        setState(() {
+          _messages.add({
+            "sender": "User 1",
+            "message":
+                "Sorry, I don’t get you. Please provide the time in a valid format (e.g., 14:30, 02:30 and am or pm is mandatory )."
           });
         });
         Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
@@ -95,18 +134,54 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
       }
     }
 
+    if (_currentReplyIndex == 6) {
+      // Question: "What is your marital status?"
+      if (!_isValidMaritalStatus(userMessage)) {
+        setState(() {
+          _messages.add({
+            "sender": "User 1",
+            "message":
+                "Sorry, I don’t get you. Please reply with 'single', 'married', 'divorced', or 'widowed'."
+          });
+        });
+        Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
+        return;
+      }
+    }
     // Trigger the next reply
     _triggerReply();
+  }
+
+  bool _isValidDate(String input) {
+    // Regex to match common date formats: DD/MM/YYYY, MM-DD-YYYY, YYYY-MM-DD, etc.
+    final RegExp dateRegex = RegExp(
+        r"^(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[0-2])[-/](\d{4})$|^(0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])[-/](\d{4})$|^(\d{4})[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])$");
+    return dateRegex.hasMatch(input);
+  }
+
+  bool _isValidTime(String userMessage) {
+    final RegExp timeRegex = RegExp(
+        r"^(?:([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?)$|^(?:0?[1-9]|1[0-2]):[0-5]\d(?::[0-5]\d)? (AM|PM)$",
+        caseSensitive: false);
+    return timeRegex.hasMatch(userMessage);
+  }
+
+  bool _isValidMaritalStatus(String userMessage) {
+    // Define valid responses for marital status
+    final List<String> validStatuses = [
+      "single",
+      "married",
+      "divorced",
+      "widowed"
+    ];
+    return validStatuses.contains(userMessage.toLowerCase());
   }
 
   void _triggerReply() {
     if (_currentReplyIndex < _user1Replies.length) {
       // Add "typing..." message to the chat
       setState(() {
-        _messages.add({
-          "sender": "User 1",
-          "message": "typing..."
-        });
+        _messages.add({"sender": "User 1", "message": "typing..."});
       });
 
       Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
@@ -185,78 +260,92 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
   //   }
   // }
 
-  final SplashController splashController = Get.put<SplashController>(SplashController());
-  final BottomNavigationController bottomNavigationController = Get.put<BottomNavigationController>(BottomNavigationController());
+  final SplashController splashController =
+      Get.put<SplashController>(SplashController());
+  final BottomNavigationController bottomNavigationController =
+      Get.put<BottomNavigationController>(BottomNavigationController());
   TimerController timerController = Get.put<TimerController>(TimerController());
-  WalletController walletController = Get.put<WalletController>(WalletController());
-  final ChatController chatController = Get.put<ChatController>(ChatController());
+  WalletController walletController =
+      Get.put<WalletController>(WalletController());
+  final ChatController chatController =
+      Get.put<ChatController>(ChatController());
   bool islowbalance = false;
-  Timer? secTimer;
-  double Minutetime = 0.0;
+  // Timer? secTimer;
+  // double Minutetime = 0.0;
+  Timer? _timer;
+  int _remainingSeconds = 60;
   // late AstrologerModel astrologerModel;
 
-  startTime(astrologerId, fireBasechatId) async {
-    log("astrologerId==========================================>$astrologerId");
-    log("fireBasechatId==========================================>$fireBasechatId");
-    await bottomNavigationController.getAstrologerbyId(astrologerId);
-    if (bottomNavigationController.astrologerbyId[0].charge == 0) {
-      chatController.showtimer.value = false;
-    } else {
-      Minutetime = global.splashController.currentUser!.walletAmount! /
-          bottomNavigationController.astrologerbyId[0].charge!;
+  // startTime(astrologerId, fireBasechatId) async {
+  //   log("astrologerId==========================================>$astrologerId");
+  //   log("fireBasechatId==========================================>$fireBasechatId");
+  //   await bottomNavigationController.getAstrologerbyId(astrologerId);
+  //   if (bottomNavigationController.astrologerbyId[0].charge == 0) {
+  //     chatController.showtimer.value = false;
+  //   } else {
+  //     Minutetime = global.splashController.currentUser!.walletAmount! /
+  //         bottomNavigationController.astrologerbyId[0].charge!;
+  //
+  //     secTimer =
+  //         Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+  //           int timeCount = timer.tick;
+  //           double updatedWalletAmount =
+  //           global.splashController.currentUser!.walletAmount!;
+  //           updatedWalletAmount = updatedWalletAmount -
+  //               bottomNavigationController.astrologerbyId[0].charge! *( timeCount/60);
+  //           log("${timer.tick}");
+  //           log('${bottomNavigationController.astrologerbyId[0].charge! * 1 >= updatedWalletAmount}');
+  //           if (bottomNavigationController.astrologerbyId[0].charge! * 1 >=
+  //               updatedWalletAmount) {
+  //             if (!timerController.isLowbalance.value) {
+  //               chatController.sendMessage(
+  //                   'User have low balance', fireBasechatId, astrologerId, true);
+  //               timerController.isLowbalance.value = true;
+  //               // timerController.isLowbalance.value = true;
+  //             }
+  //
+  //             // openBottomSheetRechrage(context);
+  //           }
+  //         });
+  //     chatController.showtimer.value = true;
+  //     chatController.update();
+  //   }
+  // }
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingSeconds > 0) {
+          _remainingSeconds--;
+        } else {
+          _timer?.cancel();
+          global.showToast(message: "If you want to continue please recharge first", textColor: Colors.white, bgColor: Colors.orange);
 
-      secTimer =
-          Timer.periodic(const Duration(minutes: 1), (Timer timer) async {
-            int timeCount = timer.tick;
-            double updatedWalletAmount =
-            global.splashController.currentUser!.walletAmount!;
-            updatedWalletAmount = updatedWalletAmount -
-                bottomNavigationController.astrologerbyId[0].charge! * timeCount;
-            log("${timer.tick}");
-            log('${bottomNavigationController.astrologerbyId[0].charge! * 1 >= updatedWalletAmount}');
-            if (bottomNavigationController.astrologerbyId[0].charge! * 1 >=
-                updatedWalletAmount) {
-              if (!timerController.isLowbalance.value) {
-                chatController.sendMessage(
-                    'User have low balance', fireBasechatId, astrologerId, true);
-                timerController.isLowbalance.value = true;
-                // timerController.isLowbalance.value = true;
-              }
-
-              // openBottomSheetRechrage(context);
-            }
-          });
-      chatController.showtimer.value = true;
-      chatController.update();
-    }
+          // global.showOnlyLoaderDialog(context);
+        }
+      });
+    });
   }
 
-  @override
-  void initState() {
-    print("Aman");
-    _triggerReply();
-    super.initState();
-  }
+
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         backgroundColor:
-        Get.theme.appBarTheme.systemOverlayStyle!.statusBarColor,
+            Get.theme.appBarTheme.systemOverlayStyle!.statusBarColor,
         title: GestureDetector(
           onTap: () async {
             print('appbar tapped');
             if (widget.flagId == 0) {
-              Get.find<ReviewController>()
-                  .getReviewData(widget.astrologerId);
+              Get.find<ReviewController>().getReviewData(widget.astrologerId);
               global.showOnlyLoaderDialog(context);
               await bottomNavigationController
                   .getAstrologerbyId(widget.astrologerId);
               global.hideLoader();
               Get.to(() => AstrologerProfile(
-                index: 0,
-              ));
+                    index: 0,
+                  ));
             }
           },
           child: Row(
@@ -264,13 +353,13 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
               CircleAvatar(
                 backgroundColor: Colors.white,
                 child: CachedNetworkImage(
-                  imageUrl: '${global.imgBaseurl}$widget.profileImage',
+                  imageUrl: '${global.imgBaseurl}${widget.profileImage}',
                   imageBuilder: (context, imageProvider) => CircleAvatar(
                     radius: 48,
                     backgroundImage: imageProvider,
                   ),
                   placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Image.asset(
                     Images.deafultUser,
                     height: 40,
@@ -291,116 +380,13 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  widget.flagId == 1
-                      ? Obx(() => chatController.showtimer.value
-                      ? CountdownTimer(
-                    endTime: DateTime.now()
-                        .millisecondsSinceEpoch +
-                        1000 *
-                            int.parse("${Minutetime.toInt()}") *
-                            60,
-                    widgetBuilder:
-                        (_, CurrentRemainingTime? time) {
-                      if (time == null) {
-                        return Text('00:00',
-                            style: TextStyle(
-                                fontSize: 10, color: Colors.red));
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: time.hours != null
-                            ? Text(
-                            '${time.hours}:${time.min}:${time.sec}',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.red))
-                            : time.min != null
-                            ? Text('${time.min}:${time.sec}',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.red))
-                            : Text('${time.sec}',
-                            style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.red)),
-                      );
-                    },
-                    onEnd: () async {
-                      final ChatController chatController =
-                      Get.find<ChatController>();
-
-                      log('in onEnd chat:- ${chatController.isEndChat} :- seconds ${timerController.totalSeconds}');
-                      if (chatController.isEndChat == false) {
-                        // call the disconnect method from requested customer
-                        // global.showOnlyLoaderDialog(Get.context);
-                        chatController.sendMessage(
-                            '${global.user.name == '' ? 'user' : global.user.name} -> ended chat',
-                            widget.fireBasechatId,
-                            widget.astrologerId,
-                            true);
-                        chatController.showBottomAcceptChat =
-                        false;
-                        global.sp =
-                        await SharedPreferences.getInstance();
-                        global.sp!.remove('chatBottom');
-                        global.sp!.setInt('chatBottom', 0);
-                        chatController.chatBottom = false;
-                        chatController.isInchat = false;
-                        chatController.isAstrologerEndedChat =
-                        false;
-                        global.callOnFcmApiSendPushNotifications(
-                            fcmTokem: [widget.fcmToken],
-                            title: 'End chat from customer');
-                        chatController.update();
-                        await timerController.endChatTime(
-                            timerController.totalSeconds,
-                            widget.chatId);
-                        splashController.getCurrentUserData();
-                        // global.hideLoader();
-                        timerController.min = 0;
-                        timerController.minText = "";
-                        timerController.sec = 0;
-                        timerController.secText = "";
-                        timerController.secTimer!.cancel();
-                        timerController.update();
-                        bottomNavigationController.astrologerList
-                            .clear();
-                        bottomNavigationController
-                            .isAllDataLoaded = false;
-                        if (bottomNavigationController
-                            .genderFilterList !=
-                            null) {
-                          bottomNavigationController
-                              .genderFilterList!
-                              .clear();
-                        }
-                        if (bottomNavigationController
-                            .languageFilter !=
-                            null) {
-                          bottomNavigationController
-                              .languageFilter!
-                              .clear();
-                        }
-                        if (bottomNavigationController
-                            .skillFilterList !=
-                            null) {
-                          bottomNavigationController
-                              .skillFilterList!
-                              .clear();
-                        }
-                        bottomNavigationController.applyFilter =
-                        false;
-                        bottomNavigationController.update();
-                        await bottomNavigationController
-                            .getAstrologerList(
-                            isLazyLoading: false);
-                        Get.off(() =>
-                            BottomNavigationBarScreen(index: 0));
-                      }
-                    },
-                  )
-                      : SizedBox())
-                      : SizedBox()
+                  Text(
+                    "${_remainingSeconds}s",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
                 ],
               ),
             ],
@@ -437,7 +423,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                         onPressed: () async {
                           global.showOnlyLoaderDialog(context);
                           final ChatController chatController =
-                          Get.find<ChatController>();
+                              Get.find<ChatController>();
                           chatController.sendMessage(
                               '${global.user.name == '' ? 'user' : global.user.name} -> ended chat',
                               widget.fireBasechatId,
@@ -468,8 +454,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                           timerController.secTimer!.cancel();
                           timerController.update();
                           bottomNavigationController.astrologerList.clear();
-                          bottomNavigationController.isAllDataLoaded =
-                          false;
+                          bottomNavigationController.isAllDataLoaded = false;
                           if (bottomNavigationController.genderFilterList !=
                               null) {
                             bottomNavigationController.genderFilterList!
@@ -477,35 +462,30 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                           }
                           if (bottomNavigationController.languageFilter !=
                               null) {
-                            bottomNavigationController.languageFilter!
-                                .clear();
+                            bottomNavigationController.languageFilter!.clear();
                           }
                           if (bottomNavigationController.skillFilterList !=
                               null) {
-                            bottomNavigationController.skillFilterList!
-                                .clear();
+                            bottomNavigationController.skillFilterList!.clear();
                           }
                           bottomNavigationController.applyFilter = false;
                           bottomNavigationController.update();
-                          await bottomNavigationController
-                              .getAstrologerList(isLazyLoading: false);
+                          await bottomNavigationController.getAstrologerList(
+                              isLazyLoading: false);
                           // Get.back();
                           // Get.back();
                           // Get.back();
-                          Get.off(
-                                  () => BottomNavigationBarScreen(index: 0));
+                          Get.off(() => BottomNavigationBarScreen(index: 0));
                         },
                         child: Text('Yes',
-                            style:
-                            TextStyle(color: Get.theme.primaryColor)),
+                            style: TextStyle(color: Get.theme.primaryColor)),
                       ),
                       TextButton(
                         onPressed: () {
                           Get.back();
                         },
                         child: Text('No',
-                            style:
-                            TextStyle(color: Get.theme.primaryColor)),
+                            style: TextStyle(color: Get.theme.primaryColor)),
                       ),
                     ],
                   ),
@@ -531,6 +511,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         // color: Colors.blue.withOpacity(0.2),
         child: Column(
           children: [
+            SizedBox(height:10,),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
@@ -540,7 +521,8 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                   final message = _messages[index];
                   final isUser2 = message['sender'] == "User 2";
                   return Align(
-                    alignment: isUser2 ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment:
+                        isUser2 ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -550,33 +532,14 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                       ),
                       child: Text(
                         message['message']!,
-                        style: TextStyle(color: isUser2 ? Colors.white : Colors.black),
+                        style: TextStyle(
+                            color: isUser2 ? Colors.white : Colors.black),
                       ),
                     ),
                   );
                 },
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: TextField(
-            //           controller: _controller,
-            //           decoration: InputDecoration(
-            //             hintText: "Type a message...",
-            //             border: OutlineInputBorder(),
-            //           ),
-            //         ),
-            //       ),
-            //       IconButton(
-            //         icon: Icon(Icons.send),
-            //         onPressed: () => _sendMessage(_controller.text),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -586,43 +549,35 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius:
-                        const BorderRadius.all(
-                            Radius.circular(30.0)),
+                            const BorderRadius.all(Radius.circular(30.0)),
                       ),
                       height: 50,
                       child: TextField(
                         controller: _controller,
                         onChanged: (value) {},
                         cursorColor: Colors.black,
-
-                        style:
-                        TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(top: 5,left: 8),
+                          contentPadding: EdgeInsets.only(top: 5, left: 8),
                           hintText: " Enter Your Message",
                           focusedBorder: OutlineInputBorder(
                             borderRadius:
-                            const BorderRadius.all(
-                                Radius.circular(30.0)),
-                            borderSide: BorderSide(
-                                color:
-                                Get.theme.primaryColor),
+                                const BorderRadius.all(Radius.circular(30.0)),
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
-                            const BorderRadius.all(
-                                Radius.circular(30.0)),
-                            borderSide: BorderSide(
-                                color:
-                                Get.theme.primaryColor),
+                                const BorderRadius.all(Radius.circular(30.0)),
+                            borderSide:
+                                BorderSide(color: Get.theme.primaryColor),
                           ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding:
-                    const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 8.0),
                     child: Material(
                       elevation: 3,
                       color: Colors.transparent,
@@ -644,8 +599,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                             _sendMessage(_controller.text);
                           },
                           child: const Padding(
-                            padding:
-                            EdgeInsets.only(left: 5.0),
+                            padding: EdgeInsets.only(left: 5.0),
                             child: Icon(
                               Icons.send,
                               size: 25,
@@ -667,6 +621,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     _scrollController.dispose();
     _controller.dispose();
     super.dispose();
