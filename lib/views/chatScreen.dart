@@ -779,7 +779,7 @@ class TabViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     paginateTask();
     return ListView.builder(
-      itemCount:2,
+      itemCount:astrologerList.length,
       controller: chatScrollController,
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -1050,7 +1050,7 @@ class TabViewWidget extends StatelessWidget {
                                         }
                                       }
                                       log("   id =====================>${astrologerList[index].id}  name==============>  ${astrologerList[index].name}");
-                                      astrologerList[index].isFreeAvailable != true? await Get.to(() =>FreeChatScreen(
+                                      astrologerList[index].isFreeAvailable == false? await Get.to(() =>FreeChatScreen(
                                         astrologerId: astrologerList[index].id,
                                         chatId: 1,
                                         astrologerName: astrologerList[index].name,
@@ -1058,6 +1058,7 @@ class TabViewWidget extends StatelessWidget {
                                         flagId: 1,
                                         profileImage: astrologerList[index].profileImage,
                                         fcmToken: "1",
+                                        balance:(astrologerList[index].charge * 5).toString(),
                                       )):
                                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>FreeChatScreen())):
                                       await Get.to(() => CallIntakeFormScreen(

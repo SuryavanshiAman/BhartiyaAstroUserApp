@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:BharatiyAstro/controllers/bottomNavigationController.dart';
+import 'package:BharatiyAstro/controllers/razorPayController.dart';
 import 'package:BharatiyAstro/controllers/reviewController.dart';
 import 'package:BharatiyAstro/controllers/splashController.dart';
 import 'package:BharatiyAstro/controllers/timer_controller.dart';
@@ -15,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/chatController.dart';
 import 'astrologerProfile/astrologerProfile.dart';
 import 'bottomNavigationBarScreen.dart';
+import 'paymentInformationScreen.dart';
 
 class FreeChatScreen extends StatefulWidget {
   final int flagId;
@@ -24,6 +26,7 @@ class FreeChatScreen extends StatefulWidget {
   final int chatId;
   final int astrologerId;
   final String? fcmToken;
+  final String balance;
   const FreeChatScreen({
     Key? key,
     required this.flagId,
@@ -33,6 +36,7 @@ class FreeChatScreen extends StatefulWidget {
     required this.chatId,
     required this.astrologerId,
     this.fcmToken,
+    required this.balance,
   }) : super(key: key);
   @override
   _FreeChatScreenState createState() => _FreeChatScreenState();
@@ -148,16 +152,73 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         return;
       }
     }
-    // Trigger the next reply
     _triggerReply();
   }
 
+  // bool _isValidDate(String input) {
+  //   // Regex to match common date formats: DD/MM/YYYY, MM-DD-YYYY, YYYY-MM-DD, etc.
+  //   final RegExp dateRegex = RegExp(
+  //       r"^(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[0-2])[-/](\d{4})$|^(0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])[-/](\d{4})$|^(\d{4})[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])$");
+  //   return dateRegex.hasMatch(input);
+  // }
   bool _isValidDate(String input) {
     // Regex to match common date formats: DD/MM/YYYY, MM-DD-YYYY, YYYY-MM-DD, etc.
     final RegExp dateRegex = RegExp(
         r"^(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[0-2])[-/](\d{4})$|^(0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])[-/](\d{4})$|^(\d{4})[-/](0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])$");
-    return dateRegex.hasMatch(input);
+
+    // Check if the input matches the date format
+    if (!dateRegex.hasMatch(input)) {
+      return false;
+    }
+    try {
+      DateTime enteredDate;
+      if (input.contains('/')) {
+        // Handle DD/MM/YYYY or MM/DD/YYYY formats
+        final parts = input.split('/');
+        if (parts[2].length == 4) {
+          // Assume DD/MM/YYYY
+          enteredDate = DateTime(
+            int.parse(parts[2]),
+            int.parse(parts[1]),
+            int.parse(parts[0]),
+          );
+        } else {
+          return false; // Invalid format
+        }
+      } else if (input.contains('-')) {
+        // Handle MM-DD-YYYY or YYYY-MM-DD formats
+        final parts = input.split('-');
+        if (parts[0].length == 4) {
+          // Assume YYYY-MM-DD
+          enteredDate = DateTime(
+            int.parse(parts[0]),
+            int.parse(parts[1]),
+            int.parse(parts[2]),
+          );
+        } else {
+          // Assume MM-DD-YYYY
+          enteredDate = DateTime(
+            int.parse(parts[2]),
+            int.parse(parts[0]),
+            int.parse(parts[1]),
+          );
+        }
+      } else {
+        return false; // Invalid format
+      }
+
+      // Check if the entered date is today or a past date
+      final today = DateTime.now();
+      if (enteredDate.isAfter(today)) {
+        return false; // Future date
+      }
+
+      return true;
+    } catch (e) {
+      return false; // Invalid date parsing
+    }
   }
+
 
   bool _isValidTime(String userMessage) {
     final RegExp timeRegex = RegExp(
@@ -179,17 +240,14 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
 
   void _triggerReply() {
     if (_currentReplyIndex < _user1Replies.length) {
-      // Add "typing..." message to the chat
       setState(() {
         _messages.add({"sender": "User 1", "message": "typing..."});
       });
 
       Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
 
-      // Simulate the delay for the actual reply
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
-          // Replace the "typing..." message with the actual reply
           _messages[_messages.length - 1] = {
             "sender": "User 1",
             "message": _user1Replies[_currentReplyIndex]
@@ -202,63 +260,6 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
     }
   }
 
-  // void _sendMessage(String text) {
-  //   if (text.isEmpty) return;
-  //
-  //   // Add the second user's message
-  //   setState(() {
-  //     _messages.add({"sender": "User 2", "message": text});
-  //   });
-  //   _controller.clear();
-  //   _scrollToBottom();
-  //   Future.delayed(const Duration(seconds: 1),(){
-  //     _triggerReply();
-  //   });
-  //
-  //
-  // }
-  // // void _triggerReply() {
-  // //
-  // //   if (_currentReplyIndex < _user1Replies.length) {
-  // //     Future.delayed(Duration(seconds: 1), () {
-  // //       setState(() {
-  // //         _messages.add({
-  // //           "sender": "User 1",
-  // //           "message": _user1Replies[_currentReplyIndex]
-  // //         });
-  // //         _currentReplyIndex++;
-  // //
-  // //       });
-  // //       Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
-  // //     });
-  // //   }
-  // // }
-  // void _triggerReply() {
-  //   if (_currentReplyIndex < _user1Replies.length) {
-  //     // Add "typing..." message to the chat
-  //     setState(() {
-  //       _messages.add({
-  //         "sender": "User 1",
-  //         "message": "typing..."
-  //       });
-  //     });
-  //     Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
-  //
-  //     // Simulate the delay for the actual reply
-  //     Future.delayed(const Duration(seconds: 2), () {
-  //       setState(() {
-  //         // Replace the "typing..." message with the actual reply
-  //         _messages[_messages.length - 1] = {
-  //           "sender": "User 1",
-  //           "message": _user1Replies[_currentReplyIndex]
-  //         };
-  //         _currentReplyIndex++;
-  //       });
-  //
-  //       _scrollToBottom();
-  //     });
-  //   }
-  // }
 
   final SplashController splashController =
       Get.put<SplashController>(SplashController());
@@ -274,43 +275,6 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
   // double Minutetime = 0.0;
   Timer? _timer;
   int _remainingSeconds = 60;
-  // late AstrologerModel astrologerModel;
-
-  // startTime(astrologerId, fireBasechatId) async {
-  //   log("astrologerId==========================================>$astrologerId");
-  //   log("fireBasechatId==========================================>$fireBasechatId");
-  //   await bottomNavigationController.getAstrologerbyId(astrologerId);
-  //   if (bottomNavigationController.astrologerbyId[0].charge == 0) {
-  //     chatController.showtimer.value = false;
-  //   } else {
-  //     Minutetime = global.splashController.currentUser!.walletAmount! /
-  //         bottomNavigationController.astrologerbyId[0].charge!;
-  //
-  //     secTimer =
-  //         Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-  //           int timeCount = timer.tick;
-  //           double updatedWalletAmount =
-  //           global.splashController.currentUser!.walletAmount!;
-  //           updatedWalletAmount = updatedWalletAmount -
-  //               bottomNavigationController.astrologerbyId[0].charge! *( timeCount/60);
-  //           log("${timer.tick}");
-  //           log('${bottomNavigationController.astrologerbyId[0].charge! * 1 >= updatedWalletAmount}');
-  //           if (bottomNavigationController.astrologerbyId[0].charge! * 1 >=
-  //               updatedWalletAmount) {
-  //             if (!timerController.isLowbalance.value) {
-  //               chatController.sendMessage(
-  //                   'User have low balance', fireBasechatId, astrologerId, true);
-  //               timerController.isLowbalance.value = true;
-  //               // timerController.isLowbalance.value = true;
-  //             }
-  //
-  //             // openBottomSheetRechrage(context);
-  //           }
-  //         });
-  //     chatController.showtimer.value = true;
-  //     chatController.update();
-  //   }
-  // }
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -319,14 +283,20 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         } else {
           _timer?.cancel();
           global.showToast(message: "If you want to continue please recharge first", textColor: Colors.white, bgColor: Colors.orange);
+          global.showOnlyLoaderDialog(context);
+          // await walletController.getAmount();
+          global.hideLoader();
+          Future.delayed(Duration(seconds: 2),(){
+            openBottomSheetRechrage(context, widget.balance,
+                '${widget.astrologerName}');
+          });
 
-          // global.showOnlyLoaderDialog(context);
         }
       });
     });
   }
 
-
+int balance=0;
 
   @override
   Widget build(BuildContext context) {
@@ -520,6 +490,8 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                 itemBuilder: (context, index) {
                   final message = _messages[index];
                   final isUser2 = message['sender'] == "User 2";
+                  final  balance=(bottomNavigationController.astrologerList[index].charge! * 5).toString();
+                  print("amanwwww$balance");
                   return Align(
                     alignment:
                         isUser2 ? Alignment.centerRight : Alignment.centerLeft,
@@ -595,8 +567,19 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
                           ),
                         ),
                         child: InkWell(
-                          onTap: () {
-                            _sendMessage(_controller.text);
+                          onTap: () async{
+                            if(_remainingSeconds==0) {
+                              global.showToast(message: "If you want to continue please recharge first", textColor: Colors.white, bgColor: Colors.orange);
+                              await walletController.getAmount();
+                              global.showOnlyLoaderDialog(context);
+                              Future.delayed(Duration(seconds: 2),(){
+                                openBottomSheetRechrage(context, (bottomNavigationController.astrologerList[0].charge! * 5).toString(),
+                                    '${widget.astrologerName}');
+                              });
+                              global.hideLoader();
+                            }else{
+                              _sendMessage(_controller.text);
+                            }
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(left: 5.0),
@@ -625,5 +608,176 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
     _scrollController.dispose();
     _controller.dispose();
     super.dispose();
+  }
+  void openBottomSheetRechrage(BuildContext context, String minBalance, String astrologer) {
+    Get.bottomSheet(
+      Wrap(
+        children: [
+          Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.85,
+                                  child: minBalance != ''
+                                      ? Text(
+                                      'Minimum balance of 5 minutes(${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)} $minBalance) is required to start conversation with $astrologer ',
+                                      style: TextStyle(fontWeight: FontWeight.w500, color: Colors.red))
+                                      : const SizedBox(),
+                                ),
+                                GestureDetector(
+                                  child: Padding(
+                                    padding: minBalance == ''
+                                        ? const EdgeInsets.only(top: 8)
+                                        : const EdgeInsets.only(top: 0),
+                                    child: Icon(Icons.close, size: 18),
+                                  ),
+                                  onTap: () {
+                                    Get.back();
+                                  },
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0, bottom: 5),
+                              child: Text('Recharge Now', style: TextStyle(fontWeight: FontWeight.w500)),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: Icon(Icons.lightbulb_rounded, color: Get.theme.primaryColor, size: 13),
+                                ),
+                                Expanded(
+                                    child: Text(
+                                        'Minimum balance required ${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)} $minBalance',
+                                        style: TextStyle(fontSize: 12)))
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+              child: GridView.builder(
+                  gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:MediaQuery.of(context).size.width<300?2:3,
+                    childAspectRatio: 3 / 3.5,
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
+                  ),
+                  // physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(8),
+                  shrinkWrap: true,
+                  itemCount: walletController.rechrage.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.delete<RazorPayController>();
+                        Get.to(() => PaymentInformationScreen(
+                          amount: double.parse(walletController.paymentAmount[index].amount.toString()),
+                          extraAmount: walletController.paymentAmount[index].amount! *
+                              (walletController.paymentAmount[index].offer! / 100),
+                        ));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(8.0),
+                        child: Container(
+                          // padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                            boxShadow: [BoxShadow(blurRadius: 8, spreadRadius: 2, color: Colors.black38)],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: Get.theme.primaryColor,
+                                  gradient: LinearGradient(
+                                      transform: GradientRotation(180), colors: [Colors.white, Get.theme.primaryColor]),
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                ),
+                                height: 25,
+                                child: Center(
+                                  child: Text(
+                                    '${walletController.paymentAmount[index].offer}% Extra',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)} ${walletController.paymentAmount[index].amount}',
+                                    style: Get.textTheme.titleSmall!.copyWith(color: Colors.black, fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Get',
+                                    style: Get.textTheme.titleSmall!.copyWith(
+                                      color: Get.theme.primaryColor,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)}  ${walletController.paymentAmount[index].amount! + (walletController.paymentAmount[index].offer! / 100) * int.parse("${walletController.paymentAmount[index].amount}")}',
+                                    style: Get.textTheme.titleSmall!.copyWith(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }))
+        ],
+      ),
+      barrierColor: Colors.black.withOpacity(0.8),
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+    );
   }
 }
