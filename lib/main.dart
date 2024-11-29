@@ -508,7 +508,7 @@ class _MyAppState extends State<MyApp> {
       });
             } else if (messageData['notificationType'] == 1) {
               //     print('fcmtoken for call:- ${messageData["fcmToken"]}');
-              print('😆😆😆😆😆');
+              print('🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️');
               callController.showBottomAcceptCallRequest(
                   channelName: messageData["channelName"] ?? "",
                   astrologerId: messageData["astrologerId"] ?? 0,
@@ -517,7 +517,9 @@ class _MyAppState extends State<MyApp> {
                   astroName: messageData["astrologerName"] ?? "Astrologer",
                   astroProfile: messageData["profile"] ?? "",
                   fcmToken: messageData["fcmToken"] ?? "",
-                  isBackGround: false);
+                  isBackGround: false,
+                isSoundOn:false,
+              );
                      Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
         print({"manu11"});
@@ -631,6 +633,7 @@ class _MyAppState extends State<MyApp> {
         Map<dynamic, dynamic> body;
         body = jsonDecode(messageData['body']);
         if (body["notificationType"] == 1) {
+          print("🙈🙈🙈🙈");
           Get.to(() => IncomingCallRequest(
                 astrologerId: body["astrologerId"],
                 astrologerName: body["astrologerName"] == null ? "Astrologer" : body["astrologerName"],
@@ -639,8 +642,10 @@ class _MyAppState extends State<MyApp> {
                 channel: body["channelName"],
                 callId: body["callId"],
                 fcmToken: body["fcmToken"] ?? "",
+              isSoundOn:true
               ));
         } else if (body["notificationType"] == 3) {
+          print("🙉🙉🙉🙉");
             Get.to(() => IncomingChatRequest(
                   astrologerName: body["astrologerName"] == null ? "Astrolo ger" : body["astrologerName"],
                   profile: body["profile"] == null ? "" : body["profile"],

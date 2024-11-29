@@ -50,6 +50,8 @@ dependencies:
   timelines: ^0.1.0
   url_launcher: ^6.1.7
   facebook_app_events:
+  flutter_tts: ^3.5.0
+  audioplayers:
 
   #WEBVIEW
   webview_flutter: ^3.0.4

@@ -14,15 +14,19 @@ import 'package:BharatiyAstro/views/placeOfBrithSearchScreen.dart';
 import 'package:BharatiyAstro/widget/customBottomButton.dart';
 import 'package:BharatiyAstro/widget/textFieldLabelWidget.dart';
 import 'package:BharatiyAstro/widget/textFieldWidget.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:BharatiyAstro/utils/global.dart' as global;
 import 'package:google_translator/google_translator.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+// import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import '../controllers/dropDownController.dart';
 import '../utils/date_converter.dart';
 import '../widget/drodownWidget.dart';
@@ -52,9 +56,39 @@ class CallIntakeFormScreen extends StatelessWidget {
   IntakeController callIntakeController = Get.find<IntakeController>();
   CallController callController = Get.find<CallController>();
   ChatController chatController = Get.find<ChatController>();
+  final FlutterTts flutterTts = FlutterTts();
+  final AudioPlayer audioPlayer = AudioPlayer();
+  String text = "Welcome to Bhartiya Astrologer..One of the most trusted  astrology platform, Aapki call  connect ki jaa rahi hai,Please be ready with your personal details and queries,Bhartiya Astrologer Aap ka Din sobh hone ki kamna karta hai.";
+  String? audioPath;
+  Future<void> convertTextToAudio() async {
+    // Get the temporary directory to save the audio file
+    Directory tempDir = await getTemporaryDirectory();
+    String filePath = '${tempDir.path}/text_audio.mp3';
 
+    // Use flutter_tts to synthesize the speech
+    await flutterTts.setLanguage("hi-IN");
+    await flutterTts.setSpeechRate(0.5); // Adjust speed as needed
+
+    // Synthesize to file
+    var result = await flutterTts.synthesizeToFile(text, filePath);
+    if (result == 1) {
+      // setState(() {
+        audioPath = filePath;
+      // });
+    }
+  }
+  void playAudio(context) async {
+    if (audioPath != null) {
+      await audioPlayer.play(DeviceFileSource(audioPath!));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Audio file not ready")),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    convertTextToAudio();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Get.theme.appBarTheme.systemOverlayStyle!.statusBarColor,
@@ -441,7 +475,7 @@ class CallIntakeFormScreen extends StatelessWidget {
                 await callIntakeController.addCallIntakeFormData();
                 print('firebase ${astrologerId}_${global.user.id}');
                 // if (isFreeAvailable == true)
-                if (isFreeAvailable == false)
+                if (isFreeAvailable == true)
                 {
                   await intakeController.checkFreeSessionAvailable();
                   if (intakeController.isAddNewRequestByFreeuser == true) {
@@ -478,7 +512,8 @@ class CallIntakeFormScreen extends StatelessWidget {
                       }
                       await chatController.sendChatRequest(astrologerId, true);
                     }
-                  } else {
+                  }
+                  else {
                     global.showToast(
                         message: 'You can not join multiple offers at same time', textColor: global.textColor, bgColor: global.toastBackGoundColor);
                   }
@@ -521,6 +556,9 @@ class CallIntakeFormScreen extends StatelessWidget {
                 // Get.back();
                 // Get.back();
                 dialogForchat();
+                // convertTextToAudio();
+                playAudio(context);
+
               } else {
                 global.showToast(
                   message: 'Please verify your phone number',

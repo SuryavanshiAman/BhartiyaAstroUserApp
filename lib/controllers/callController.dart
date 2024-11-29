@@ -48,7 +48,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     required String astroProfile,
     required String token,
     bool isBackGround = true,
-    bool isSoundOn = true,
+     required bool isSoundOn,
   }) async {
     print('in callcontroller showBottomAcceptCallRequest');
     showBottomAcceptCall = true;
@@ -75,6 +75,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
       FlutterRingtonePlayer.play(fromAsset: "assets/sound/notification.mp3");
       print("👀👀👀");
     }else{
+      print("✌️✌️✌️😋😋");
       FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3");
     }
     NoticationController notificationController = Get.put(NoticationController());
@@ -91,6 +92,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
             token: bottomToken ?? "",
             astrologerName: bottomAstrologerName,
             astrologerProfile: bottomAstrologerProfile,
+        isSoundOn:isSoundOn,
           ));
     } else {
       notificationController.showCallNotification(
@@ -105,6 +107,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
                       token: bottomToken ?? "",
                       astrologerName: bottomAstrologerName,
                       astrologerProfile: bottomAstrologerProfile,
+                  isSoundOn:isSoundOn,
                     ))
               });
     }

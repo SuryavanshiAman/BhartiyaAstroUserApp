@@ -21,6 +21,7 @@ class IncomingCallRequest extends StatefulWidget {
   final String token;
   final String channel;
   final String fcmToken;
+  final bool? isSoundOn;
 
   IncomingCallRequest(
       {super.key,
@@ -30,7 +31,9 @@ class IncomingCallRequest extends StatefulWidget {
       this.astrologerProfile,
       required this.astrologerId,
       required this.token,
-      required this.channel});
+      required this.channel,
+       this.isSoundOn,
+      });
 
   @override
   State<IncomingCallRequest> createState() => _IncomingCallRequestState();
@@ -40,7 +43,8 @@ class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsB
   CallController callController = Get.find<CallController>();
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this); // Add observer to track lifecycle changes
+    WidgetsBinding.instance.addObserver(this);
+   widget.isSoundOn==true? FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"):null;
   }
 
   @override
@@ -49,25 +53,21 @@ class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsB
     super.dispose();
   }
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.paused) {
-      // App goes to background
-      print("App is in the background");
-      // Stop the sound when app is paused (background)
-    } else if (state == AppLifecycleState.resumed) {
-      // App returns to foreground
-    print("🤣🤣");
-      print("App is in the foreground");
-    // FlutterRingtonePlayer.stop();
-      FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"); // Play sound again if needed
-    }
-  }
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //
+  //   if (state == AppLifecycleState.paused) {
+  //     print("App is in the background");
+  //   } else if (state == AppLifecycleState.resumed) {
+  //   print("🤣🤣");
+  //     print("App is in the foreground");
+  //   FlutterRingtonePlayer.stop();
+  //     // FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"); // Play sound again if needed
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    print("👌👌👌👌👌");
     return SafeArea(
         child: WillPopScope(
       onWillPop: () async {
