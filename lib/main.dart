@@ -22,6 +22,7 @@ import 'package:BharatiyAstro/views/chat/incoming_chat_request.dart';
 import 'package:BharatiyAstro/views/live_astrologer/live_astrologer_screen.dart';
 import 'package:BharatiyAstro/views/loginScreen.dart';
 import 'package:BharatiyAstro/views/splashScreen.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -508,6 +509,8 @@ class _MyAppState extends State<MyApp> {
       });
             } else if (messageData['notificationType'] == 1) {
               //     print('fcmtoken for call:- ${messageData["fcmToken"]}');
+              final AudioPlayer audioPlayer = AudioPlayer();
+
               print('🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️🤷‍♂️');
               callController.showBottomAcceptCallRequest(
                   channelName: messageData["channelName"] ?? "",

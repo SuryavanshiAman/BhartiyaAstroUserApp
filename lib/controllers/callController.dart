@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:BharatiyAstro/controllers/bottomNavigationController.dart';
 import 'package:BharatiyAstro/controllers/notificationController.dart';
 import 'package:BharatiyAstro/utils/services/api_helper.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 
 import 'package:flutter/material.dart';
@@ -38,7 +39,32 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
 
     super.onInit();
   }
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  String? audioPath;
 
+  Future<void> setAudioPath(String path) async {
+    audioPath = path;
+    update();
+  }
+
+  Future<void> playAudio() async {
+    if (audioPath != null) {
+      await _audioPlayer.play(DeviceFileSource(audioPath!));
+    } else {
+      Get.snackbar("Error", "Audio file not ready",
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> stopAudio() async {
+    await _audioPlayer.stop();
+  }
+
+  // @override
+  // void onClose() {
+  //   _audioPlayer.dispose();
+  //   super.onClose();
+  // }
   showBottomAcceptCallRequest({
     required int astrologerId,
     required String channelName,
@@ -82,7 +108,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     // log("Availibilty=============================================================${bottomNavigationController.astrologerbyId[0].name}");
     update();
     if (!isBackGround) {
-
+      stopAudio();
       print("😊😊😊");
       Get.to(() => IncomingCallRequest(
             astrologerId: bottomAstrologerId ?? 0,
@@ -116,6 +142,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
   @override
   void onClose() {
     super.onClose();
+    _audioPlayer.dispose();
   }
 
   setTabIndex(int index) {
@@ -180,35 +207,11 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
               height: 12,
             ),
 
-            //        showBottomAcceptCall = true;
-            // bottomAstrologerId = astrologerId;
-            // bottomAstrologerName = astroName;
-            // bottomAstrologerProfile = astroProfile;
-            // bottomToken = token;
-            // bottomCallId = callId;
-            // bottomFcmToken = fcmToken;
-            // bottomChannel = channelName;
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // InkWell(
-                //   onTap: () async {
-                //    Get.back();
-                //   },
-                //   child: Container(
-                //     padding: const EdgeInsets.all(10),
-                //     margin: const EdgeInsets.only(right: 20),
-                //     decoration: BoxDecoration(
-                //       color: Colors.red,
-                //       borderRadius: BorderRadius.circular(30),
-                //     ),
-                //     child: Icon(
-                //       Icons.chat,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
+
                 InkWell(
                   onTap: () async {
                     Get.to(() => IncomingCallRequest(
