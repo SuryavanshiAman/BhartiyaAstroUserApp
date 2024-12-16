@@ -39,26 +39,26 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
 
     super.onInit();
   }
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  String? audioPath;
-
-  Future<void> setAudioPath(String path) async {
-    audioPath = path;
-    update();
-  }
-
-  Future<void> playAudio() async {
-    if (audioPath != null) {
-      await _audioPlayer.play(DeviceFileSource(audioPath!));
-    } else {
-      Get.snackbar("Error", "Audio file not ready",
-          snackPosition: SnackPosition.BOTTOM);
-    }
-  }
-
-  Future<void> stopAudio() async {
-    await _audioPlayer.stop();
-  }
+  // final AudioPlayer _audioPlayer = AudioPlayer();
+  // String? audioPath;
+  //
+  // Future<void> setAudioPath(String path) async {
+  //   audioPath = path;
+  //   update();
+  // }
+  //
+  // Future<void> playAudio() async {
+  //   if (audioPath != null) {
+  //     await _audioPlayer.play(DeviceFileSource(audioPath!));
+  //   } else {
+  //     Get.snackbar("Error", "Audio file not ready",
+  //         snackPosition: SnackPosition.BOTTOM);
+  //   }
+  // }
+  //
+  // Future<void> stopAudio() async {
+  //   await _audioPlayer.stop();
+  // }
 
   // @override
   // void onClose() {
@@ -108,7 +108,6 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
     // log("Availibilty=============================================================${bottomNavigationController.astrologerbyId[0].name}");
     update();
     if (!isBackGround) {
-      stopAudio();
       print("😊😊😊");
       Get.to(() => IncomingCallRequest(
             astrologerId: bottomAstrologerId ?? 0,
@@ -142,7 +141,7 @@ class CallController extends GetxController with GetSingleTickerProviderStateMix
   @override
   void onClose() {
     super.onClose();
-    _audioPlayer.dispose();
+    // _audioPlayer.dispose();
   }
 
   setTabIndex(int index) {

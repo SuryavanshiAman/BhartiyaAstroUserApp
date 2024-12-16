@@ -1,14 +1,14 @@
+import 'dart:convert';
+
 import 'package:BharatiyAstro/controllers/callController.dart';
 import 'package:BharatiyAstro/utils/images.dart';
 import 'package:BharatiyAstro/views/call/accept_call_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-
 import 'package:get/get.dart';
 import 'package:BharatiyAstro/utils/global.dart' as global;
-import 'package:google_translator/google_translator.dart';
-
 import '../../controllers/bottomNavigationController.dart';
 import '../bottomNavigationBarScreen.dart';
 
@@ -41,10 +41,28 @@ class IncomingCallRequest extends StatefulWidget {
 
 class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsBindingObserver{
   CallController callController = Get.find<CallController>();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
    widget.isSoundOn==true? FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"):null;
+   // widget.isSoundOn==true? FlutterRingtonePlayer.stop():null;
+    _firebaseMessaging.getToken().then((String? token) {
+      print("FCM Token: $token");
+    });
+
+    // Handle notifications when the app is in the background or terminated
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      FlutterRingtonePlayer.stop();
+      // Handle incoming message when the app is in the foreground
+      print("Received a message while the app is in the foreground");
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      FlutterRingtonePlayer.stop();
+      // Handle the notification click event when the app is in the background or terminated
+      print("Notification clicked");
+    });
   }
 
   @override
@@ -53,18 +71,21 @@ class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsB
     super.dispose();
   }
   @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //
-  //   if (state == AppLifecycleState.paused) {
-  //     print("App is in the background");
-  //   } else if (state == AppLifecycleState.resumed) {
-  //   print("🤣🤣");
-  //     print("App is in the foreground");
-  //   FlutterRingtonePlayer.stop();
-  //     // FlutterRingtonePlayer.play(fromAsset: "assets/sound/music.mp3"); // Play sound again if needed
-  //   }
-  // }
+
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.paused) {
+      // App goes to background
+      print("App is in the background");
+      FlutterRingtonePlayer.stop();
+    } else if (state == AppLifecycleState.resumed) {
+      print("App is in the foreground");
+      FlutterRingtonePlayer.stop();
+      print("App is in the foreground");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +186,6 @@ class _IncomingCallRequestState extends State<IncomingCallRequest> with WidgetsB
                       children: [
                         InkWell(
                           onTap: () async {
-
                             print("CalCutgya");
                             global.showOnlyLoaderDialog(context);
                             try{

@@ -81,7 +81,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           liveController.update();
         }
       }
-    } else if (message.notification!.title == "For Live accept/reject") {
+    }
+    else if (message.notification!.title == "For Live accept/reject") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
         print({"manu2"});
@@ -114,7 +115,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           isFollow: isFollow,
         );
       }
-    } else if (message.notification!.title == "For accepting time while user already splitted") {
+    }
+    else if (message.notification!.title == "For accepting time while user already splitted") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
         print({"manu3"});
@@ -127,7 +129,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       liveController.joinUserName = message.data["joinUserName"] ?? "";
       liveController.joinUserProfile = message.data["joinUserProfile"] ?? "";
       liveController.update();
-    } else if (message.notification!.title == "Notification for customer support status update") {
+    }
+    else if (message.notification!.title == "Notification for customer support status update") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
 
@@ -137,7 +140,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         customerSupportController.status = message1["status"] ?? "WAITING";
         customerSupportController.update();
       }
-    } else if (message.notification!.title == "End chat from astrologer") {
+    }
+    else if (message.notification!.title == "End chat from astrologer") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();
         print({"manu5"});
@@ -149,7 +153,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       chatController.chatBottom = false;
       chatController.isAstrologerEndedChat = true;
       chatController.update();
-    } else if (message.notification!.title == "Astrologer Leave call") {
+    }
+    else if (message.notification!.title == "Astrologer Leave call") {
       Future.delayed(Duration(milliseconds: 500)).then((value) async {
         await _localNotifications.cancelAll();print({"manu6"});
       });
@@ -158,7 +163,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       global.sp!.setInt('callBottom', 0);
       callController.callBottom = false;
       callController.update();
-    } else if (messageData['notificationType'] == 4) {
+    }
+    else if (messageData['notificationType'] == 4) {
       print('live astrologer $messageData');
       await bottomController.getLiveAstrologerList();
       bottomController.liveAstrologer = bottomController.liveAstrologer;
@@ -181,7 +187,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       //   firebaseChatId: messageData["firebaseChatId"],
       //   fcmToken: messageData["fcmToken"],
       // );
-    } else if (messageData['notificationType'] == 1) {
+    }
+
+    else if (messageData['notificationType'] == 1) {
       print('fcmtoken for call:- ${messageData["fcmToken"]}');
       print('😁😁😁😁');
 /// call notification come this will active
@@ -226,14 +234,7 @@ void main() async {
   HttpOverrides.global = PostHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // FlutterError.onError = (errorDetails) {
-  //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  // };
-  // // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //   return true;
-  // };
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value){
@@ -248,24 +249,6 @@ void main() async {
     provisional: false,
     sound: true,
   );
-  // await NotificationController.initializeLocalNotifications();
-  // print(settings);
-  // AwesomeNotifications().initialize(null, [
-  //   NotificationChannel(
-  //       channelKey: 'callChannel',
-  //       channelName: 'Channel of calling',
-  //       channelDescription: 'channel of calling',
-  //       defaultColor: Colors.redAccent,
-  //       ledColor: Colors.white,
-  //       importance: NotificationImportance.High,
-  //       channelShowBadge: true, // Show badge when the notification arrives
-  //       // Allow the notification to bypass Do Not Disturb mode
-  //       locked: true,
-  //       criticalAlerts: true
-
-  //       // defaultRingtoneType: DefaultRingtoneType.Ringtone
-  //       )
-  // ]);
 
   HttpOverrides.global = new MyHttpOverrides();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -373,33 +356,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // AwesomeNotifications().actionStream.listen(((event) {
-    //   if (event.buttonKeyPressed == "Accecpt") {
-    //     log("call method is called ");
-    //     FlutterRingtonePlayer.stop();
-    //     _MyAppState.navigatorKey.currentState!.push(
-    //       MaterialPageRoute(
-    //           builder: (_) => 
-    // AcceptChatScreen(
-    //                 astrologerId: global.sp!.getInt("bottomAstrologerId") ?? 0,
-    //                 chatId: global.sp!.getInt("bottomChatId") ?? 0,
-    //                 astrologerName: global.sp!.getString("bottomAstrologerName") ?? "",
-    //                 fireBasechatId: global.sp!.getString("bottomFirebaseChatId") ?? "",
-    //                 flagId: 1,
-    //                 profileImage: global.sp!.getString("bottomAstrologerProfile") ?? "",
-    //                 fcmToken: global.sp!.getString("bottomFcmToken") ?? "",
-    //               )),
-    //     );
-    //   }
-    //   if (event.buttonKeyPressed == "Reject") {
-    //     log("call method is called ");
-    //     FlutterRingtonePlayer.stop();
-    //   }
-    // }));
+
     //Sent Notification When App is Running || Background Message is Automatically Sent by Firebase
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log("message id" + message.data.toString());
-
       print('chnannelName data ${message.data['ChannelName']}');
       print('chnannelName data ${global.getSystemFlagValue(global.systemFlagNameList.agoraAppId)}');
 

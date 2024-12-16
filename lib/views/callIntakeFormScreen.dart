@@ -56,55 +56,25 @@ class CallIntakeFormScreen extends StatelessWidget {
   IntakeController callIntakeController = Get.find<IntakeController>();
   CallController callController = Get.find<CallController>();
   ChatController chatController = Get.find<ChatController>();
-  // final FlutterTts flutterTts = FlutterTts();
-  // final AudioPlayer audioPlayer = AudioPlayer();
-  // String text = "Welcome to Bhartiya Astrologer..One of the most trusted  astrology platform, Aapki call  connect ki jaa rahi hai,Please be ready with your personal details and queries,Bhartiya Astrologer Aap ka Din sobh hone ki kamna karta hai.";
-  // String? audioPath;
+  // final String text =
+  //     "Welcome to Bhartiya Astrologer..One of the most trusted astrology platform, Aapki call connect ki jaa rahi hai, Please be ready with your personal details and queries, Bhartiya Astrologer Aap ka Din sobh hone ki kamna karta hai.";
+  //
   // Future<void> convertTextToAudio() async {
-  //   // Get the temporary directory to save the audio file
   //   Directory tempDir = await getTemporaryDirectory();
   //   String filePath = '${tempDir.path}/text_audio.mp3';
   //
-  //   // Use flutter_tts to synthesize the speech
+  //   FlutterTts flutterTts = FlutterTts();
   //   await flutterTts.setLanguage("hi-IN");
-  //   await flutterTts.setSpeechRate(0.5); // Adjust speed as needed
+  //   await flutterTts.setSpeechRate(0.5);
   //
-  //   // Synthesize to file
   //   var result = await flutterTts.synthesizeToFile(text, filePath);
   //   if (result == 1) {
-  //     // setState(() {
-  //       audioPath = filePath;
-  //     // });
+  //     Get.find<CallController>().setAudioPath(filePath);
   //   }
   // }
-  // void playAudio(context) async {
-  //   if (audioPath != null) {
-  //     await audioPlayer.play(DeviceFileSource(audioPath!));
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Audio file not ready")),
-  //     );
-  //   }
-  // }
-  final String text =
-      "Welcome to Bhartiya Astrologer..One of the most trusted astrology platform, Aapki call connect ki jaa rahi hai, Please be ready with your personal details and queries, Bhartiya Astrologer Aap ka Din sobh hone ki kamna karta hai.";
-
-  Future<void> convertTextToAudio() async {
-    Directory tempDir = await getTemporaryDirectory();
-    String filePath = '${tempDir.path}/text_audio.mp3';
-
-    FlutterTts flutterTts = FlutterTts();
-    await flutterTts.setLanguage("hi-IN");
-    await flutterTts.setSpeechRate(0.5);
-
-    var result = await flutterTts.synthesizeToFile(text, filePath);
-    if (result == 1) {
-      Get.find<CallController>().setAudioPath(filePath);
-    }
-  }
   @override
   Widget build(BuildContext context) {
-    convertTextToAudio();
+    // convertTextToAudio();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Get.theme.appBarTheme.systemOverlayStyle!.statusBarColor,
@@ -572,7 +542,7 @@ class CallIntakeFormScreen extends StatelessWidget {
                 // Get.back();
                 // Get.back();
                 dialogForchat();
-                Get.find<CallController>().playAudio();
+                // Get.find<CallController>().playAudio();
                 // convertTextToAudio();
                 // playAudio(context);
 
