@@ -1050,7 +1050,8 @@ class TabViewWidget extends StatelessWidget {
                                         }
                                       }
                                       log("   id =====================>${astrologerList[index].id}  name==============>  ${astrologerList[index].name}");
-                                      astrologerList[index].isFreeAvailable == true? await Get.to(() =>FreeChatScreen(
+                                      // astrologerList[index].isFreeAvailable == true? await Get.to(() =>FreeChatScreen(
+                                      astrologerList[index].isFreeAvailable != true? await Get.to(() =>FreeChatScreen(
                                         astrologerId: astrologerList[index].id,
                                         chatId: 1,
                                         astrologerName: astrologerList[index].name,

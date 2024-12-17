@@ -48,21 +48,37 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
     print("Aman");
     Future.delayed(Duration(seconds: 2),(){
       _startTimer();
-      _triggerReply();
+      _sendRandomGreeting();
+      // _triggerReply();
     });
 
     super.initState();
   }
   final List<Map<String, String>> _messages = []; // Stores all messages
-  final List<String> _user1Replies = [
+  final List<String> _greetingMessages = [
+    "Hello!",
     "Hi there!",
+    "Namaste!",
+    "Greetings!",
+    "Hello! It's a pleasure to meet you,"
+  ];
+  final List<String> _positiveMessages = [
+    "Stay positive and keep moving forward! 😊",
+    "Good things are coming your way! 🌟",
+    "Believe in yourself! You're amazing! 💪",
+    "Success is on the horizon! Keep going! 🌈",
+    "You're doing great! Keep up the good work! 🌟"
+  ];
+
+  final List<String> _user1Replies = [
     "What is your name?",
     "What is your gender?",
     "What is your Date of Birth?",
     "What is your Time of Birth?",
     "What is your marital status?",
-    "You will get success soon😊😊",
     "How may i help you?",
+    "Do you have your kundali?",
+    "Ok wait",
     "Have a great day!"
   ]; // Predefined replies for user 1
   int _currentReplyIndex = 0; // Tracks the current reply index
@@ -77,11 +93,21 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
       );
     }
   }
+  void _sendPositiveMessage() {
+    final positiveMessage = _positiveMessages[
+    (DateTime.now().millisecondsSinceEpoch % _positiveMessages.length)
+    ];
 
+    setState(() {
+      _messages.add({"sender": "User 1", "message": positiveMessage});
+    });
+
+    Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
+
+  }
   void _sendMessage(String text) {
     if (text.isEmpty) return;
 
-    // Add the user's message to the chat
     setState(() {
       _messages.add({"sender": "User 2", "message": text});
     });
@@ -94,7 +120,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
 
   void _handleReply(String userMessage) {
     // Custom validation logic for specific questions
-    if (_currentReplyIndex == 3) {
+    if (_currentReplyIndex == 2) {
       // Question: "What is your gender?"
       if (userMessage != "male" && userMessage.toLowerCase() != "female") {
         // Send fallback reply
@@ -109,7 +135,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         return;
       }
     }
-    if (_currentReplyIndex == 4) {
+    if (_currentReplyIndex == 3) {
       // Question: "What is your date of birth?"
       if (!_isValidDate(userMessage)) {
         setState(() {
@@ -123,7 +149,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         return;
       }
     }
-    if (_currentReplyIndex == 5) {
+    if (_currentReplyIndex == 4) {
       // Question: "What is your time?"
       if (!_isValidTime(userMessage)) {
         setState(() {
@@ -138,7 +164,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
       }
     }
 
-    if (_currentReplyIndex == 6) {
+    if (_currentReplyIndex == 5) {
       // Question: "What is your marital status?"
       if (!_isValidMaritalStatus(userMessage)) {
         setState(() {
@@ -151,8 +177,15 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
         Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
         return;
       }
+
     }
-    _triggerReply();
+    if (_currentReplyIndex == 5) {
+      // After asking for marital status, send positive messages
+      _sendPositiveMessage();
+    }
+
+
+  _triggerReply();
   }
 
   // bool _isValidDate(String input) {
@@ -237,7 +270,18 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
     ];
     return validStatuses.contains(userMessage.toLowerCase());
   }
+  void _sendRandomGreeting() {
+    final randomGreeting = _greetingMessages[
+    (DateTime.now().millisecondsSinceEpoch % _greetingMessages.length)
+    ];
 
+    setState(() {
+      _messages.add({"sender": "User 1", "message": randomGreeting});
+    });
+
+    Future.delayed(const Duration(milliseconds: 100), _scrollToBottom);
+    // Future.delayed(const Duration(seconds: 1), _triggerReply);
+  }
   void _triggerReply() {
     if (_currentReplyIndex < _user1Replies.length) {
       setState(() {
