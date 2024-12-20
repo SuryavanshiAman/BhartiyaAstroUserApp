@@ -318,7 +318,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
   // Timer? secTimer;
   // double Minutetime = 0.0;
   Timer? _timer;
-  int _remainingSeconds = 60;
+  int _remainingSeconds = 120;
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -411,10 +411,10 @@ int balance=0;
             if (widget.flagId == 0) {
               Get.back();
             } else {
-              if (timerController.totalSeconds < 60) {
+              if (timerController.totalSeconds < 120) {
                 Get.dialog(AlertDialog(
                   title: Text(
-                    "You can end chat after one minute",
+                    "You can end chat after Two minute",
                     style: Get.textTheme.subtitle1,
                   ),
                   content: TextButton(
