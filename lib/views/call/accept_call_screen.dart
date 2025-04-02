@@ -11,12 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
-import 'package:google_translator/google_translator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:BharatiyAstro/utils/global.dart' as global;
 import 'package:BharatiyAstro/controllers/splashController.dart';
 import '../../controllers/bottomNavigationController.dart';
-import '../../controllers/chatController.dart';
 import '../../model/astrologer_model.dart';
 
 class AcceptCallScreen extends StatefulWidget {
