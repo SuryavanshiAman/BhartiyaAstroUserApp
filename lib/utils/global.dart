@@ -727,8 +727,8 @@ showToast(
       to: splashController.currentLanguageCode);
   return Fluttertoast.showToast(
     msg: translation.text,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.TOP,
     timeInSecForIosWeb: 1,
     backgroundColor: bgColor,
     textColor: textColor,

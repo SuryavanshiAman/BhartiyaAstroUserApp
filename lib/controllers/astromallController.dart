@@ -1,7 +1,9 @@
+import 'package:BharatiyAstro/controllers/splashController.dart';
 import 'package:BharatiyAstro/model/astromall_category_model.dart';
 import 'package:BharatiyAstro/model/astromall_product_model.dart';
 import 'package:BharatiyAstro/model/user_address_model.dart';
 import 'package:BharatiyAstro/utils/services/api_helper.dart';
+import 'package:BharatiyAstro/views/bottomNavigationBarScreen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -157,7 +159,7 @@ class AstromallController extends GetxController with GetSingleTickerProviderSta
     }
   }
 
-  orderRequest({int? catId, int? prodId, int? addId, double? payAmount, int? gstPercent, String? payMethod, double? totalPayment}) async {
+  orderRequest({int? catId, int? prodId, int? addId, double? payAmount, int? gstPercent, String? payMethod, double? totalPayment,required BuildContext context}) async {
     try {
       await global.checkBody().then((result) async {
         if (result) {
@@ -166,12 +168,20 @@ class AstromallController extends GetxController with GetSingleTickerProviderSta
               await global.splashController.getCurrentUserData();
               global.splashController.currentUser?.walletAmount = global.splashController.currentUser?.walletAmount ?? 0 - (totalPayment ?? 0);
               update();
+              Get.off(() => BottomNavigationBarScreen(index: 0));
+              SplashController splashController = Get.find<SplashController>();
 
-              global.showToast(
-                message: 'Order SuccessFully',
-                textColor: global.textColor,
-                bgColor: global.toastBackGoundColor,
-              );
+              if (context.mounted) {
+                showDialog(
+                  context: context,
+                  builder: (_) =>  PaymentSuccessPopup(amount:totalPayment), // or your Dialog widget
+                );
+              }
+              // global.showToast(
+              //   message: 'Order SuccessFully',
+              //   textColor: global.textColor,
+              //   bgColor: global.toastBackGoundColor,
+              // );
             } else {
               global.showToast(
                 message: 'Order not created',
@@ -387,5 +397,88 @@ class AstromallController extends GetxController with GetSingleTickerProviderSta
         });
       }
     });
+  }
+}
+
+class PaymentSuccessPopup extends StatelessWidget {
+  final double? amount;
+  const PaymentSuccessPopup({super.key, required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Checkmark circle
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.green.shade100,
+                    Colors.green.shade200,
+                    Colors.green,
+                  ],
+                  stops: const [0.5, 0.8, 1.0],
+                ),
+              ),
+              child: const Icon(Icons.check, color: Colors.white, size: 40),
+            ),
+            const SizedBox(height: 20),
+
+            const Text(
+              'Order Place Successful',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const Divider(height: 30),
+
+            RichText(
+              text:  TextSpan(
+                text: 'Amount paid ',
+                style: TextStyle(color: Colors.black),
+                children: [
+                  TextSpan(
+                    text: ' ₹ ${amount.toString()}',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            RichText(
+              text: const TextSpan(
+                text: 'Amount deducted  by ',
+                style: TextStyle(color: Colors.black),
+                children: [
+                  TextSpan(
+                    text: 'Wallet',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }

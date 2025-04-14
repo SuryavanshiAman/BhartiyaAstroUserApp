@@ -14,7 +14,7 @@ import '../../controllers/razorPayController.dart';
 import '../../widget/commonAppbar.dart';
 
 class AddressScreen extends StatelessWidget {
-  AddressScreen({Key? key}) : super(key: key);
+  AddressScreen({Key? key,}) : super(key: key);
   WalletController walletController = Get.find<WalletController>();
 
   @override

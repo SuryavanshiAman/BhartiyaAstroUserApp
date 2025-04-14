@@ -109,6 +109,7 @@ class OrderPurchaseScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
             onPressed: () async {
+
               await astromallController.orderRequest(
                 addId: astromallController.userAddress[0].id,
                 catId: astromallController.astroProductbyId[0].productCategoryId,
@@ -117,9 +118,10 @@ class OrderPurchaseScreen extends StatelessWidget {
                 payMethod: 'RazorPay',
                 prodId: astromallController.astroProductbyId[0].id,
                 totalPayment: double.parse(astromallController.astroProductbyId[0].amount.toString()) + (double.parse(astromallController.astroProductbyId[0].amount.toString()) * int.parse(global.getSystemFlagValue(global.systemFlagNameList.gst)) / 100),
+                context: context
               );
               astromallController.update();
-              Get.back();
+              // Get.back();
             },
             child: Text('Proceed to Pay', style: Get.textTheme.subtitle1!.copyWith(fontSize: 12)),
             style: ButtonStyle(
