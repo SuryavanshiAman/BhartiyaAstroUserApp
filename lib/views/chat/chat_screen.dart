@@ -1258,14 +1258,18 @@ class _AcceptChatScreenState extends State<AcceptChatScreen> {
                                                 const BorderRadius.all(
                                                     Radius.circular(30.0)),
                                           ),
-                                          height: 50,
+                                          height: 55,
                                           child: TextField(
                                             controller: messageController,
+                                            // minLines: 1,
+                                            // maxLines: 6,
+                                            
                                             onChanged: (value) {},
                                             cursorColor: Colors.black,
                                             style:
                                                 TextStyle(color: Colors.black),
                                             decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(8),
                                               focusedBorder: OutlineInputBorder(
                                                 borderRadius:
                                                     const BorderRadius.all(

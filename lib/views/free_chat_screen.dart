@@ -572,6 +572,7 @@ int balance=0;
                         controller: _controller,
                         onChanged: (value) {},
                         cursorColor: Colors.black,
+                        // maxLines: 2,
                         style: TextStyle(color: Colors.black),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(top: 5, left: 8),

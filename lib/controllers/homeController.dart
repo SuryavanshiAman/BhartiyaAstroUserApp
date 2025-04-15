@@ -98,7 +98,7 @@ class HomeController extends GetxController {
   RxList AstroService = [
     {'Name': 'Call', 'Image': Images.call},
     {'Name': 'Chat', 'Image': Images.chat},
-    {'Name': 'Video Call', 'Image': Images.vedioCall},
+    // {'Name': 'Video Call', 'Image': Images.vedioCall},
     {'Name': 'Report', 'Image': Images.report},
   ].obs;
 

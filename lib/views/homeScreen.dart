@@ -814,43 +814,43 @@ class HomeScreen extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    final BottomNavigationController bottomNavigationController =
-                                        Get.find<BottomNavigationController>();
-                                    bottomNavigationController.astrologerList = [];
-                                    bottomNavigationController.astrologerList.clear();
-                                    bottomNavigationController.isAllDataLoaded = false;
-                                    bottomNavigationController.update();
-                                    global.showOnlyLoaderDialog(context);
-                                    await bottomNavigationController.getAstrologerList(isLazyLoading: false);
-                                    global.hideLoader();
-                                    Get.to(() => GetReportScreen());
-                                    // openBottomPopup();
-                                  },
-                                  child: Container(
-                                    height: 65,
-                                    width: 65,
-                                    //  padding: EdgeInsets.all(8),
-                                    margin: EdgeInsets.symmetric(horizontal: 6),
-                                    decoration:
-                                        BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
-                                    child: Image.asset('${homeController.AstroService[3]['Image']}'),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '${homeController.AstroService[3]['Name']}',
-                                  style: Get.theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 13),
-                                )
-                              ],
-                            )
+                            // Column(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     InkWell(
+                            //       onTap: () async {
+                            //         final BottomNavigationController bottomNavigationController =
+                            //             Get.find<BottomNavigationController>();
+                            //         bottomNavigationController.astrologerList = [];
+                            //         bottomNavigationController.astrologerList.clear();
+                            //         bottomNavigationController.isAllDataLoaded = false;
+                            //         bottomNavigationController.update();
+                            //         global.showOnlyLoaderDialog(context);
+                            //         await bottomNavigationController.getAstrologerList(isLazyLoading: false);
+                            //         global.hideLoader();
+                            //         Get.to(() => GetReportScreen());
+                            //         // openBottomPopup();
+                            //       },
+                            //       child: Container(
+                            //         height: 65,
+                            //         width: 65,
+                            //         //  padding: EdgeInsets.all(8),
+                            //         margin: EdgeInsets.symmetric(horizontal: 6),
+                            //         decoration:
+                            //             BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                            //         child: Image.asset('${homeController.AstroService[3]['Image']}'),
+                            //       ),
+                            //     ),
+                            //     SizedBox(
+                            //       height: 10,
+                            //     ),
+                            //     Text(
+                            //       '${homeController.AstroService[3]['Name']}',
+                            //       style: Get.theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 13),
+                            //     )
+                            //   ],
+                            // )
                           ],
                         ),
                       ),
@@ -1210,246 +1210,247 @@ class HomeScreen extends StatelessWidget {
                       //           ),
                       //         );
                       // }),
-                      GetBuilder<BottomNavigationController>(builder: (c) {
-                        return Get.find<BottomNavigationController>().liveAstrologer.length == 0
-                            ? const SizedBox()
-                            : SizedBox(
-                                height: 200,
-                                child: Card(
-                                  elevation: 0,
-                                  margin: EdgeInsets.only(top: 6),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'Live Astrologers',
-                                                    style: Get.theme.primaryTextTheme.subtitle1!
-                                                        .copyWith(fontWeight: FontWeight.w500),
-                                                  ),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(left: 5),
-                                                    child: GestureDetector(
-                                                      onTap: () async {
-                                                        global.showOnlyLoaderDialog(context);
-                                                        await bottomControllerMain.getLiveAstrologerList();
-                                                        global.hideLoader();
-                                                      },
-                                                      child: Icon(
-                                                        Icons.refresh,
-                                                        size: 20,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  Get.to(() => LiveAstrologerListScreen());
-                                                },
-                                                child: Text(
-                                                  'View All',
-                                                  style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.grey[500],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GetBuilder<BottomNavigationController>(
-                                          builder: (c) {
-                                            return Expanded(
-                                              child: ListView.builder(
-                                                itemCount: Get.find<BottomNavigationController>().liveAstrologer.length,
-                                                shrinkWrap: true,
-                                                scrollDirection: Axis.horizontal,
-                                                padding: EdgeInsets.only(top: 10, left: 10),
-                                                itemBuilder: (context, index) {
-                                                  return GestureDetector(
-                                                      onTap: () async {
-                                                        bottomControllerMain.anotherLiveAstrologers =
-                                                            Get.find<BottomNavigationController>()
-                                                                .liveAstrologer
-                                                                .where((element) =>
-                                                                    element.astrologerId !=
-                                                                    Get.find<BottomNavigationController>()
-                                                                        .liveAstrologer[index]
-                                                                        .astrologerId)
-                                                                .toList();
-                                                        bottomControllerMain.update();
-                                                        await liveController.getWaitList(
-                                                            Get.find<BottomNavigationController>()
-                                                                .liveAstrologer[index]
-                                                                .channelName);
-                                                        int index2 = liveController.waitList.indexWhere(
-                                                            (element) => element.userId == global.currentUserId);
-                                                        if (index2 != -1) {
-                                                          liveController.isImInWaitList = true;
-                                                          liveController.update();
-                                                        } else {
-                                                          liveController.isImInWaitList = false;
-                                                          liveController.update();
-                                                        }
-                                                        liveController.isImInLive = true;
-                                                        liveController.isJoinAsChat = false;
-                                                        liveController.isLeaveCalled = false;
-                                                        liveController.update();
-                                                        bool isLogin = await global.isLogin();
-                                                        if (isLogin) {
-                                                          Get.to(
-                                                            () => LiveAstrologerScreen(
-                                                              token: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .token,
-                                                              channel: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .channelName,
-                                                              astrologerName: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .name,
-                                                              astrologerProfile: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .profileImage,
-                                                              astrologerId: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .astrologerId,
-                                                              isFromHome: true,
-                                                              charge: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .charge,
-                                                              isForLiveCallAcceptDecline: false,
-                                                              isFromNotJoined: false,
-                                                              isFollow: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .isFollow!,
-                                                              videoCallCharge: Get.find<BottomNavigationController>()
-                                                                  .liveAstrologer[index]
-                                                                  .videoCallRate,
-                                                            ),
-                                                          );
-                                                        }
-                                                      },
-                                                      child: SizedBox(
-                                                          child: Stack(alignment: Alignment.bottomCenter, children: [
-                                                        Get.find<BottomNavigationController>()
-                                                                    .liveAstrologer[index]
-                                                                    .profileImage !=
-                                                                ""
-                                                            ? Container(
-                                                                width: 95,
-                                                                height: 200,
-                                                                margin: EdgeInsets.only(right: 4),
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors.black.withOpacity(0.3),
-                                                                    borderRadius: BorderRadius.circular(10),
-                                                                    border: Border.all(
-                                                                      color: Color.fromARGB(255, 214, 214, 214),
-                                                                    ),
-                                                                    image: DecorationImage(
-                                                                        fit: BoxFit.cover,
-                                                                        image: NetworkImage(
-                                                                          '${global.imgBaseurl}${Get.find<BottomNavigationController>().liveAstrologer[index].profileImage}',
-                                                                        ),
-                                                                        colorFilter: ColorFilter.mode(
-                                                                            Colors.black.withOpacity(0.3),
-                                                                            BlendMode.darken))),
-                                                              )
-                                                            : Container(
-                                                                width: 95,
-                                                                height: 200,
-                                                                margin: EdgeInsets.only(right: 4),
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors.black.withOpacity(0.3),
-                                                                    borderRadius: BorderRadius.circular(10),
-                                                                    border: Border.all(
-                                                                      color: Color.fromARGB(255, 214, 214, 214),
-                                                                    ),
-                                                                    image: DecorationImage(
-                                                                        fit: BoxFit.cover,
-                                                                        image: AssetImage(
-                                                                          Images.deafultUser,
-                                                                        ),
-                                                                        colorFilter: ColorFilter.mode(
-                                                                            Colors.black.withOpacity(0.3),
-                                                                            BlendMode.darken))),
-                                                              ),
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(bottom: 20),
-                                                          child: Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Container(
-                                                                  decoration: BoxDecoration(
-                                                                color: Get.theme.primaryColor,
-                                                                borderRadius: BorderRadius.circular(5),
-                                                              )),
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(bottom: 20),
-                                                                child: Column(
-                                                                  mainAxisSize: MainAxisSize.min,
-                                                                  children: [
-                                                                    Container(
-                                                                      decoration: BoxDecoration(
-                                                                        color: Get.theme.primaryColor,
-                                                                        borderRadius: BorderRadius.circular(5),
-                                                                      ),
-                                                                      padding: EdgeInsets.symmetric(horizontal: 3),
-                                                                      child: Row(
-                                                                        children: [
-                                                                          CircleAvatar(
-                                                                            radius: 3,
-                                                                            backgroundColor: Colors.green,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width: 3,
-                                                                          ),
-                                                                          Text(
-                                                                            'LIVE',
-                                                                            style: TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontWeight: FontWeight.w300,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                      '${Get.find<BottomNavigationController>().liveAstrologer[index].name}',
-                                                                      style: TextStyle(
-                                                                        fontSize: 12,
-                                                                        fontWeight: FontWeight.w300,
-                                                                        color: Colors.white,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ])));
-                                                },
-                                              ),
-                                            );
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                      }),
+                      /// live astro list
+                      // GetBuilder<BottomNavigationController>(builder: (c) {
+                      //   return Get.find<BottomNavigationController>().liveAstrologer.length == 0
+                      //       ? const SizedBox()
+                      //       : SizedBox(
+                      //           height: 200,
+                      //           child: Card(
+                      //             elevation: 0,
+                      //             margin: EdgeInsets.only(top: 6),
+                      //             shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                      //             child: Padding(
+                      //               padding: const EdgeInsets.symmetric(vertical: 10),
+                      //               child: Column(
+                      //                 crossAxisAlignment: CrossAxisAlignment.start,
+                      //                 children: [
+                      //                   Padding(
+                      //                     padding: const EdgeInsets.symmetric(horizontal: 10),
+                      //                     child: Row(
+                      //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //                       children: [
+                      //                         Row(
+                      //                           children: [
+                      //                             Text(
+                      //                               'Live Astrologers',
+                      //                               style: Get.theme.primaryTextTheme.subtitle1!
+                      //                                   .copyWith(fontWeight: FontWeight.w500),
+                      //                             ),
+                      //                             Padding(
+                      //                               padding: EdgeInsets.only(left: 5),
+                      //                               child: GestureDetector(
+                      //                                 onTap: () async {
+                      //                                   global.showOnlyLoaderDialog(context);
+                      //                                   await bottomControllerMain.getLiveAstrologerList();
+                      //                                   global.hideLoader();
+                      //                                 },
+                      //                                 child: Icon(
+                      //                                   Icons.refresh,
+                      //                                   size: 20,
+                      //                                 ),
+                      //                               ),
+                      //                             )
+                      //                           ],
+                      //                         ),
+                      //                         GestureDetector(
+                      //                           onTap: () async {
+                      //                             Get.to(() => LiveAstrologerListScreen());
+                      //                           },
+                      //                           child: Text(
+                      //                             'View All',
+                      //                             style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
+                      //                               fontWeight: FontWeight.w400,
+                      //                               color: Colors.grey[500],
+                      //                             ),
+                      //                           ),
+                      //                         ),
+                      //                       ],
+                      //                     ),
+                      //                   ),
+                      //                   GetBuilder<BottomNavigationController>(
+                      //                     builder: (c) {
+                      //                       return Expanded(
+                      //                         child: ListView.builder(
+                      //                           itemCount: Get.find<BottomNavigationController>().liveAstrologer.length,
+                      //                           shrinkWrap: true,
+                      //                           scrollDirection: Axis.horizontal,
+                      //                           padding: EdgeInsets.only(top: 10, left: 10),
+                      //                           itemBuilder: (context, index) {
+                      //                             return GestureDetector(
+                      //                                 onTap: () async {
+                      //                                   bottomControllerMain.anotherLiveAstrologers =
+                      //                                       Get.find<BottomNavigationController>()
+                      //                                           .liveAstrologer
+                      //                                           .where((element) =>
+                      //                                               element.astrologerId !=
+                      //                                               Get.find<BottomNavigationController>()
+                      //                                                   .liveAstrologer[index]
+                      //                                                   .astrologerId)
+                      //                                           .toList();
+                      //                                   bottomControllerMain.update();
+                      //                                   await liveController.getWaitList(
+                      //                                       Get.find<BottomNavigationController>()
+                      //                                           .liveAstrologer[index]
+                      //                                           .channelName);
+                      //                                   int index2 = liveController.waitList.indexWhere(
+                      //                                       (element) => element.userId == global.currentUserId);
+                      //                                   if (index2 != -1) {
+                      //                                     liveController.isImInWaitList = true;
+                      //                                     liveController.update();
+                      //                                   } else {
+                      //                                     liveController.isImInWaitList = false;
+                      //                                     liveController.update();
+                      //                                   }
+                      //                                   liveController.isImInLive = true;
+                      //                                   liveController.isJoinAsChat = false;
+                      //                                   liveController.isLeaveCalled = false;
+                      //                                   liveController.update();
+                      //                                   bool isLogin = await global.isLogin();
+                      //                                   if (isLogin) {
+                      //                                     Get.to(
+                      //                                       () => LiveAstrologerScreen(
+                      //                                         token: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .token,
+                      //                                         channel: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .channelName,
+                      //                                         astrologerName: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .name,
+                      //                                         astrologerProfile: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .profileImage,
+                      //                                         astrologerId: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .astrologerId,
+                      //                                         isFromHome: true,
+                      //                                         charge: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .charge,
+                      //                                         isForLiveCallAcceptDecline: false,
+                      //                                         isFromNotJoined: false,
+                      //                                         isFollow: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .isFollow!,
+                      //                                         videoCallCharge: Get.find<BottomNavigationController>()
+                      //                                             .liveAstrologer[index]
+                      //                                             .videoCallRate,
+                      //                                       ),
+                      //                                     );
+                      //                                   }
+                      //                                 },
+                      //                                 child: SizedBox(
+                      //                                     child: Stack(alignment: Alignment.bottomCenter, children: [
+                      //                                   Get.find<BottomNavigationController>()
+                      //                                               .liveAstrologer[index]
+                      //                                               .profileImage !=
+                      //                                           ""
+                      //                                       ? Container(
+                      //                                           width: 95,
+                      //                                           height: 200,
+                      //                                           margin: EdgeInsets.only(right: 4),
+                      //                                           decoration: BoxDecoration(
+                      //                                               color: Colors.black.withOpacity(0.3),
+                      //                                               borderRadius: BorderRadius.circular(10),
+                      //                                               border: Border.all(
+                      //                                                 color: Color.fromARGB(255, 214, 214, 214),
+                      //                                               ),
+                      //                                               image: DecorationImage(
+                      //                                                   fit: BoxFit.cover,
+                      //                                                   image: NetworkImage(
+                      //                                                     '${global.imgBaseurl}${Get.find<BottomNavigationController>().liveAstrologer[index].profileImage}',
+                      //                                                   ),
+                      //                                                   colorFilter: ColorFilter.mode(
+                      //                                                       Colors.black.withOpacity(0.3),
+                      //                                                       BlendMode.darken))),
+                      //                                         )
+                      //                                       : Container(
+                      //                                           width: 95,
+                      //                                           height: 200,
+                      //                                           margin: EdgeInsets.only(right: 4),
+                      //                                           decoration: BoxDecoration(
+                      //                                               color: Colors.black.withOpacity(0.3),
+                      //                                               borderRadius: BorderRadius.circular(10),
+                      //                                               border: Border.all(
+                      //                                                 color: Color.fromARGB(255, 214, 214, 214),
+                      //                                               ),
+                      //                                               image: DecorationImage(
+                      //                                                   fit: BoxFit.cover,
+                      //                                                   image: AssetImage(
+                      //                                                     Images.deafultUser,
+                      //                                                   ),
+                      //                                                   colorFilter: ColorFilter.mode(
+                      //                                                       Colors.black.withOpacity(0.3),
+                      //                                                       BlendMode.darken))),
+                      //                                         ),
+                      //                                   Padding(
+                      //                                     padding: const EdgeInsets.only(bottom: 20),
+                      //                                     child: Column(
+                      //                                       mainAxisSize: MainAxisSize.min,
+                      //                                       children: [
+                      //                                         Container(
+                      //                                             decoration: BoxDecoration(
+                      //                                           color: Get.theme.primaryColor,
+                      //                                           borderRadius: BorderRadius.circular(5),
+                      //                                         )),
+                      //                                         Padding(
+                      //                                           padding: const EdgeInsets.only(bottom: 20),
+                      //                                           child: Column(
+                      //                                             mainAxisSize: MainAxisSize.min,
+                      //                                             children: [
+                      //                                               Container(
+                      //                                                 decoration: BoxDecoration(
+                      //                                                   color: Get.theme.primaryColor,
+                      //                                                   borderRadius: BorderRadius.circular(5),
+                      //                                                 ),
+                      //                                                 padding: EdgeInsets.symmetric(horizontal: 3),
+                      //                                                 child: Row(
+                      //                                                   children: [
+                      //                                                     CircleAvatar(
+                      //                                                       radius: 3,
+                      //                                                       backgroundColor: Colors.green,
+                      //                                                     ),
+                      //                                                     SizedBox(
+                      //                                                       width: 3,
+                      //                                                     ),
+                      //                                                     Text(
+                      //                                                       'LIVE',
+                      //                                                       style: TextStyle(
+                      //                                                         fontSize: 12,
+                      //                                                         fontWeight: FontWeight.w300,
+                      //                                                       ),
+                      //                                                     ),
+                      //                                                   ],
+                      //                                                 ),
+                      //                                               ),
+                      //                                               Text(
+                      //                                                 '${Get.find<BottomNavigationController>().liveAstrologer[index].name}',
+                      //                                                 style: TextStyle(
+                      //                                                   fontSize: 12,
+                      //                                                   fontWeight: FontWeight.w300,
+                      //                                                   color: Colors.white,
+                      //                                                 ),
+                      //                                               ),
+                      //                                             ],
+                      //                                           ),
+                      //                                         )
+                      //                                       ],
+                      //                                     ),
+                      //                                   ),
+                      //                                 ])));
+                      //                           },
+                      //                         ),
+                      //                       );
+                      //                     },
+                      //                   )
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      // }),
                       GetBuilder<BottomNavigationController>(builder: (bottomNavigationController) {
                         return bottomNavigationController.astrologerList.isEmpty
                             ? const SizedBox()
