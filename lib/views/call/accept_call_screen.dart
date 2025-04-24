@@ -8,6 +8,7 @@ import 'package:BharatiyAstro/views/bottomNavigationBarScreen.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,18 @@ import 'package:BharatiyAstro/utils/global.dart' as global;
 import 'package:BharatiyAstro/controllers/splashController.dart';
 import '../../controllers/bottomNavigationController.dart';
 import '../../model/astrologer_model.dart';
+
+class PiPHandler {
+  static const platform = MethodChannel('pip_channel');
+
+  static Future<void> enterPiPMode() async {
+    try {
+      await platform.invokeMethod('enterPiP');
+    } catch (e) {
+      print("Failed to enter PiP: $e");
+    }
+  }
+}
 
 class AcceptCallScreen extends StatefulWidget {
   final String astrologerName;
@@ -37,7 +50,7 @@ class AcceptCallScreen extends StatefulWidget {
   State<AcceptCallScreen> createState() => _AcceptCallScreenState();
 }
 
-class _AcceptCallScreenState extends State<AcceptCallScreen> {
+class _AcceptCallScreenState extends State<AcceptCallScreen> with WidgetsBindingObserver{
   CallController callController = Get.put<CallController>(CallController());
   SplashController splashController = Get.put<SplashController>(SplashController());
   int uid = 0;
@@ -105,6 +118,16 @@ class _AcceptCallScreenState extends State<AcceptCallScreen> {
       print('totalsecons $callController.totalSeconds');
     });
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      print("🐬🐬🐬🐬🐬 App minimized");
+      PiPHandler.enterPiPMode();
+    } else if (state == AppLifecycleState.resumed) {
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -476,6 +499,7 @@ class _AcceptCallScreenState extends State<AcceptCallScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (timer != null) {
       timer!.cancel();
       print('stop timer in despose');
