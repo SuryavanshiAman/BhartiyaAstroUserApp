@@ -11,6 +11,7 @@ import 'package:BharatiyAstro/controllers/reviewController.dart';
 import 'package:BharatiyAstro/controllers/skillController.dart';
 import 'package:BharatiyAstro/controllers/walletController.dart';
 import 'package:BharatiyAstro/main.dart';
+import 'package:BharatiyAstro/model/current_user_model.dart';
 import 'package:BharatiyAstro/utils/images.dart';
 import 'package:BharatiyAstro/views/VideoCall/VideoCallScreen.dart';
 import 'package:BharatiyAstro/views/addMoneyToWallet.dart';
@@ -744,7 +745,7 @@ class TabViewWidget extends StatelessWidget {
   }) : super(key: key);
 
   ScrollController chatScrollController = ScrollController();
-
+  // final SplashController splashController = Get.find<SplashController>();
   void paginateTask() {
     chatScrollController.addListener(() async {
       if (chatScrollController.position.pixels == chatScrollController.position.maxScrollExtent &&
@@ -774,7 +775,7 @@ class TabViewWidget extends StatelessWidget {
       }
     });
   }
-
+  CurrentUserModel user= CurrentUserModel();
   @override
   Widget build(BuildContext context) {
     paginateTask();
@@ -872,135 +873,133 @@ class TabViewWidget extends StatelessWidget {
                                     )
                             ],
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    astrologerList[index].name,
-                                  ),
-                                  astrologerList[index].allSkill == ""
-                                      ? const SizedBox()
-                                      : Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Icon(
-                                              Icons.skateboarding_outlined,
-                                              color: Colors.grey[600],
-                                              size: 15,
-                                            ),
-                                            Container(
-                                              width: Get.width * 0.58,
-                                              child: Text(
-                                                astrologerList[index].allSkill,
-                                                style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.grey[600],
-                                                ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  astrologerList[index].name,
+                                ),
+                                astrologerList[index].allSkill == ""
+                                    ? const SizedBox()
+                                    : Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.skateboarding_outlined,
+                                            color: Colors.grey[600],
+                                            size: 15,
+                                          ),
+                                          Container(
+                                            width: Get.width * 0.58,
+                                            child: Text(
+                                              astrologerList[index].allSkill,
+                                              style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.grey[600],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                  astrologerList[index].languageKnown == ""
-                                      ? const SizedBox()
-                                      : Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Icon(
-                                              Icons.language,
-                                              color: Colors.grey[600],
-                                              size: 15,
-                                            ),
-                                            SizedBox(
-                                              width: Get.width * 0.58,
-                                              child: Text(
-                                                astrologerList[index].languageKnown,
-                                                style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
-                                                  fontWeight: FontWeight.w300,
-                                                  color: Colors.grey[600],
-                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                astrologerList[index].languageKnown == ""
+                                    ? const SizedBox()
+                                    : Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.language,
+                                            color: Colors.grey[600],
+                                            size: 15,
+                                          ),
+                                          SizedBox(
+                                            width: Get.width * 0.58,
+                                            child: Text(
+                                              astrologerList[index].languageKnown,
+                                              style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                                color: Colors.grey[600],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.perm_contact_cal_outlined,
+                                          ),
+                                        ],
+                                      ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.perm_contact_cal_outlined,
+                                      color: Colors.grey[600],
+                                      size: 15,
+                                    ),
+                                    Text(
+                                      'Experience : ${astrologerList[index].experienceInYears} Years',
+                                      style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
+                                        fontWeight: FontWeight.w300,
                                         color: Colors.grey[600],
-                                        size: 15,
                                       ),
-                                      Text(
-                                        'Experience : ${astrologerList[index].experienceInYears} Years',
-                                        style: Get.theme.primaryTextTheme.bodySmall!.copyWith(
-                                          fontWeight: FontWeight.w300,
-                                          color: Colors.grey[600],
-                                        ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    // astrologerList[index].isFreeAvailable == true
+                                    //     ? Text(
+                                    //         'first call is free',
+                                    //         style: Get.theme.textTheme.subtitle1!.copyWith(
+                                    //           fontSize: 12,
+                                    //           fontWeight: FontWeight.w500,
+                                    //           letterSpacing: 0,
+                                    //           color: Color.fromARGB(255, 167, 1, 1),
+                                    //         ),
+                                    //       )
+                                    //     : const SizedBox(),
+                                    // SizedBox(
+                                    //   width: astrologerList[index].isFreeAvailable == true ? 10 : 0,
+                                    // ),
+                                    Text(
+                                      '${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)} ${astrologerList[index].charge}/min',
+                                      style: Get.theme.textTheme.subtitle1!.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 0,
+                                        // decoration: astrologerList[index].isFreeAvailable == true
+                                        //     ? TextDecoration.lineThrough
+                                        //     : null,
+                                        color:Color.fromARGB(255, 167, 1, 1),
                                       ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      // astrologerList[index].isFreeAvailable == true
-                                      //     ? Text(
-                                      //         'first call is free',
-                                      //         style: Get.theme.textTheme.subtitle1!.copyWith(
-                                      //           fontSize: 12,
-                                      //           fontWeight: FontWeight.w500,
-                                      //           letterSpacing: 0,
-                                      //           color: Color.fromARGB(255, 167, 1, 1),
-                                      //         ),
-                                      //       )
-                                      //     : const SizedBox(),
-                                      // SizedBox(
-                                      //   width: astrologerList[index].isFreeAvailable == true ? 10 : 0,
-                                      // ),
-                                      Text(
-                                        '${global.getSystemFlagValueForLogin(global.systemFlagNameList.currency)} ${astrologerList[index].charge}/min',
-                                        style: Get.theme.textTheme.subtitle1!.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 0,
-                                          // decoration: astrologerList[index].isFreeAvailable == true
-                                          //     ? TextDecoration.lineThrough
-                                          //     : null,
-                                          color:Color.fromARGB(255, 167, 1, 1),
-                                        ),
-                                      ),
-                                      astrologerList[index].chatStatus == "Online"
-                                          ? Icon(
-                                              Icons.circle,
-                                              color: Colors.green,
-                                              size: 20,
-                                            )
-                                          : Icon(
-                                              Icons.circle,
-                                              color: Colors.red,
-                                              size: 20,
-                                            )
-                                      // astrologerList[index].chatStatus ==
-                                      //         "Wait Time"
-                                      //     ? Text(
-                                      //         astrologerList[index]
-                                      //                     .chatWaitTime!
-                                      //                     .difference(
-                                      //                         DateTime
-                                      //                             .now())
-                                      //                     .inMinutes >
-                                      //                 0
-                                      //             ? "Wait till - ${astrologerList[index].chatWaitTime!.difference(DateTime.now()).inMinutes} min"
-                                      //             : "Wait till",
-                                      //         style: TextStyle(
-                                      //             color: Colors.red,
-                                      //             fontSize: 09),
-                                      //       )
-                                      //     : SizedBox()
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                    astrologerList[index].chatStatus == "Online"
+                                        ? Icon(
+                                            Icons.circle,
+                                            color: Colors.green,
+                                            size: 20,
+                                          )
+                                        : Icon(
+                                            Icons.circle,
+                                            color: Colors.red,
+                                            size: 20,
+                                          )
+                                    // astrologerList[index].chatStatus ==
+                                    //         "Wait Time"
+                                    //     ? Text(
+                                    //         astrologerList[index]
+                                    //                     .chatWaitTime!
+                                    //                     .difference(
+                                    //                         DateTime
+                                    //                             .now())
+                                    //                     .inMinutes >
+                                    //                 0
+                                    //             ? "Wait till - ${astrologerList[index].chatWaitTime!.difference(DateTime.now()).inMinutes} min"
+                                    //             : "Wait till",
+                                    //         style: TextStyle(
+                                    //             color: Colors.red,
+                                    //             fontSize: 09),
+                                    //       )
+                                    //     : SizedBox()
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                           Icon(
@@ -1021,81 +1020,91 @@ class TabViewWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
 
-                          buttonWidget('Cat', Images.chatSmall, () async {
-                            bool isLogin = await global.isLogin();
-                            if (isLogin) {
+                          GetBuilder<SplashController>(builder: (splashController){
+                              return buttonWidget('Chat', Images.chatSmall, () async {
+                                bool isLogin = await global.isLogin();
+                                if (isLogin) {
+                                 final isFree=  await global.splashController.getCurrentUserData();
+                                 print("eeeeeeee: $isFree");
+                                  print(splashController.currentUser?.freeChat);
+                                  print(splashController.currentUser?.name);
+                                  print("user.freeChat");
+                                  log("=====================>available bilance${ astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount}");
+                                  if (global.user.name == "") {
+                                    global.showOnlyLoaderDialog(context);
 
-                              log("=====================>available bilance${ astrologerList[index].charge * 5 <=
-                                    global.splashController.currentUser!.walletAmount}");
-                              if (global.user.name == "") {
-                                global.showOnlyLoaderDialog(context);
-                                await global.splashController.getCurrentUserData();
-                                global.hideLoader();
-                                Get.to(() => EditUserProfile());
-                              }
-                              else {
-                                if (astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount)
-                                {
-
-                                  await bottomNavigationController.checkAlreadyInReq(astrologerList[index].id);
-                                  if (bottomNavigationController.isUserAlreadyInChatReq == false) {
-                                    if (astrologerList[index].chatStatus == "Online" ||
-                                        astrologerList[index].chatStatus == "Wait Time") {
-                                      global.showOnlyLoaderDialog(context);
-
-                                      if (astrologerList[index].chatWaitTime != null) {
-                                        if (astrologerList[index].chatWaitTime!.difference(DateTime.now()).inMinutes <
-                                            0) {
-                                          await bottomNavigationController.changeOfflineStatus(
-                                              astrologerList[index].id, "Online");
-                                        }
-                                      }
-                                      log("   id =====================>${astrologerList[index].id}  name==============>  ${astrologerList[index].name}");
-                                      // astrologerList[index].isFreeAvailable == true? await Get.to(() =>FreeChatScreen(
-                                      astrologerList[index].isFreeAvailable == true? await Get.to(() =>FreeChatScreen(
-                                        astrologerId: astrologerList[index].id,
-                                        chatId: 1,
-                                        astrologerName: astrologerList[index].name,
-                                        fireBasechatId: "1",
-                                        flagId: 1,
-                                        profileImage: astrologerList[index].profileImage,
-                                        fcmToken: "1",
-                                        balance:(astrologerList[index].charge * 5).toString(),
-                                      )):
-                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>FreeChatScreen())):
-                                      await Get.to(() => CallIntakeFormScreen(
-                                            type: "Chat",
-                                            astrologerId: astrologerList[index].id,
-                                            astrologerName: astrologerList[index].name,
-                                            astrologerProfile: astrologerList[index].profileImage,
-                                            isFreeAvailable: astrologerList[index].isFreeAvailable,
-                                          )
-                                      );
-                                      global.hideLoader();
-                                    } else if (astrologerList[index].chatStatus == "Offline") {
-                                      bottomNavigationController.dialogForJoinInWaitListForListPageOnly(
-                                        context,
-                                        astrologerList[index].name,
-                                        true,
-                                        astrologerList[index].id,
-                                        astrologerList[index].profileImage,
-                                        astrologerList[index].charge,
-                                        astrologerList[index].isFreeAvailable,
-                                      );
-                                    }
-                                  } else {
-                                    bottomNavigationController.dialogForNotCreatingSession(context);
+                                    global.hideLoader();
+                                    Get.to(() => EditUserProfile());
+                                    print(user.freeChat);
+                                    print("user.freeChat");
+                                  } else if (splashController.currentUser?.freeChat==0){
+                                    Get.to(() =>FreeChatScreen(
+                                      astrologerId: astrologerList[index].id,
+                                      chatId: 1,
+                                      astrologerName: astrologerList[index].name,
+                                      fireBasechatId: "1",
+                                      flagId: 1,
+                                      profileImage: astrologerList[index].profileImage,
+                                      fcmToken: "1",
+                                      balance:(astrologerList[index].charge * 5).toString(),
+                                    ));
                                   }
-                                } else {
-                                  global.showOnlyLoaderDialog(context);
-                                  await walletController.getAmount();
-                                  global.hideLoader();
-                                  openBottomSheetRechrage(context, (astrologerList[index].charge * 5).toString(),
-                                      astrologerList[index].name);
+                                  else {
+                                    if (astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount)
+                                    {
+
+                                      await bottomNavigationController.checkAlreadyInReq(astrologerList[index].id);
+                                      if (bottomNavigationController.isUserAlreadyInChatReq == false) {
+                                        if (astrologerList[index].chatStatus == "Online" ||
+                                            astrologerList[index].chatStatus == "Wait Time") {
+                                          global.showOnlyLoaderDialog(context);
+
+                                          if (astrologerList[index].chatWaitTime != null) {
+                                            if (astrologerList[index].chatWaitTime!.difference(DateTime.now()).inMinutes <
+                                                0) {
+                                              await bottomNavigationController.changeOfflineStatus(
+                                                  astrologerList[index].id, "Online");
+                                            }
+                                          }
+                                          log("   id =====================>${astrologerList[index].id}  name==============>  ${astrologerList[index].name}");
+                                          // astrologerList[index].isFreeAvailable == true? await Get.to(() =>FreeChatScreen(
+                                          astrologerList[index].isFreeAvailable == false?
+                                          await Get.to(() => CallIntakeFormScreen(
+                                                type: "Chat",
+                                                astrologerId: astrologerList[index].id,
+                                                astrologerName: astrologerList[index].name,
+                                                astrologerProfile: astrologerList[index].profileImage,
+                                                isFreeAvailable: astrologerList[index].isFreeAvailable,
+                                              )
+                                          ):null;
+                                          global.hideLoader();
+                                        } else if (astrologerList[index].chatStatus == "Offline") {
+                                          bottomNavigationController.dialogForJoinInWaitListForListPageOnly(
+                                            context,
+                                            astrologerList[index].name,
+                                            true,
+                                            astrologerList[index].id,
+                                            astrologerList[index].profileImage,
+                                            astrologerList[index].charge,
+                                            astrologerList[index].isFreeAvailable,
+                                          );
+                                        }
+                                      } else {
+                                        bottomNavigationController.dialogForNotCreatingSession(context);
+                                      }
+                                    }
+                                    else {
+                                      global.showOnlyLoaderDialog(context);
+                                      await walletController.getAmount();
+                                      global.hideLoader();
+                                      openBottomSheetRechrage(context, (astrologerList[index].charge * 5).toString(),
+                                          astrologerList[index].name);
+                                    }
+                                  }
                                 }
-                              }
+                              }, false);
                             }
-                          }, false),
+                          ),
                           buttonWidget('Call', Images.callSmall, () async {
                             bool isLogin = await global.isLogin();
                             if (isLogin) {

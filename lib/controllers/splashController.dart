@@ -169,27 +169,59 @@ class SplashController extends GetxController {
   //   }
   // }
 
-  getCurrentUserData() async {
+  Future<String?> getCurrentUserData() async {
     try {
-      await global.checkBody().then((result) async {
-        if (result) {
-          global.sp = await SharedPreferences.getInstance();
-          await apiHelper.getCurrentUser().then((result) {
-            if (result.status == "200") {
-   
-              currentUser = result.recordList;
-              global.saveUser(currentUser!);
-              global.user = currentUser!;
-              print('current user profile from splash ${global.user.profile}');
-              update();
-            } else {}
-          });
+      bool result = await global.checkBody();
+      if (result) {
+        var apiResult = await apiHelper.getCurrentUser();
+        if (apiResult.status == "200") {
+          try {
+            currentUser = apiResult.recordList;
+            print("freeChat: ${currentUser!.freeChat}");
+            global.saveUser(currentUser!);
+            global.user = currentUser!;
+            update(); // notifies the UI
+            return currentUser!.freeChat.toString();
+          } catch (e) {
+            print("Error parsing user data: $e");
+          }
         }
-      });
+      }
     } catch (e) {
-      print('Exception in getCurrentUserData():' + e.toString());
+      print('Exception in getCurrentUserData(): $e');
     }
+
+    update(); // still call update even if something goes wrong
+    return null; // return null if the function fails
   }
+
+
+  // Future<String?> getCurrentUserData() async {
+  //   try {
+  //     await global.checkBody().then((result) async {
+  //       if (result) {
+  //         // global.sp = await SharedPreferences.getInstance();
+  //          apiHelper.getCurrentUser().then((result) {
+  //           if (result.status == "200") {
+  //             try{
+  //               currentUser = result.recordList;
+  //               print("dsdsjkdjkdjk: ${currentUser!.freeChat}");
+  //               global.saveUser(currentUser!);
+  //               global.user = currentUser!;
+  //               update();
+  //               return currentUser!.freeChat.toString();
+  //             }catch(e){
+  //               print("err: $e");
+  //             }
+  //           } else {}
+  //         });
+  //       }
+  //     });
+  //   } catch (e) {
+  //     print('Exception in getCurrentUserData():' + e.toString());
+  //   }
+  //   update();
+  // }
 
   getSystemFlag() async {
     try {

@@ -43,6 +43,7 @@ import 'package:http/http.dart' as http;
 import 'package:BharatiyAstro/utils/global.dart' as global;
 
 import '../../controllers/reviewController.dart';
+import '../../controllers/splashController.dart';
 import '../../model/assistant_model.dart';
 import '../../model/astromallHistoryModel.dart';
 import '../../model/customer_support_review_model.dart';
@@ -135,6 +136,27 @@ class APIHelper {
       return getAPIResult(response, recordList);
     } catch (e) {
       print('Exception in getCurrentUser:' + e.toString());
+    }
+  }
+  Future<dynamic> updateChatStatue() async {
+    print("update api sdddsbds: ");
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/chatstatus"),
+        headers: await global.getApiHeaders(true),
+        body: json.encode({"userid": global.user.id}),
+      );
+      dynamic recordList;
+      print(response.body);
+      if (response.statusCode == 200) {
+        SplashController().getCurrentUserData();
+        // recordList = CurrentUserModel.fromJson(json.decode(response.body)["data"]);
+      } else {
+        recordList = null;
+      }
+      return getAPIResult(response, recordList);
+    } catch (e) {
+      print('Exception in updateChatStatue:' + e.toString());
     }
   }
 

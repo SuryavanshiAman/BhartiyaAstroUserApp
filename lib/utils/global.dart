@@ -52,6 +52,7 @@ CurrentUserModel? currentUserPayment;
 CurrentUserModel user = CurrentUserModel();
 Color toastBackGoundColor = Colors.black;
 Color textColor = Colors.white;
+
 NetworkController networkController = Get.put((NetworkController()));
 SplashController splashController = Get.find<SplashController>();
 final DateFormat formatter = DateFormat("dd MMM yy, hh:mm a");
@@ -822,7 +823,10 @@ Future<void> share() async {
 }
 
 //Api Header
-Future<Map<String, String>> getApiHeaders(bool authorizationRequired) async {
+Future<Map<String, String>>
+
+
+getApiHeaders(bool authorizationRequired) async {
   Map<String, String> apiHeader = new Map<String, String>();
 
   if (authorizationRequired) {

@@ -154,14 +154,14 @@ class SearchAstrologerScreen extends StatelessWidget {
                                   ));
                             },
                           ),
-                          TopServicesWidget(
-                            icon: Icons.live_tv,
-                            color: Color.fromARGB(255, 235, 236, 221),
-                            text: 'Live',
-                            onTap: () {
-                              Get.to(() => LiveAstrologerListScreen());
-                            },
-                          ),
+                          // TopServicesWidget(
+                          //   icon: Icons.live_tv,
+                          //   color: Color.fromARGB(255, 235, 236, 221),
+                          //   text: 'Live',
+                          //   onTap: () {
+                          //     Get.to(() => LiveAstrologerListScreen());
+                          //   },
+                          // ),
                           TopServicesWidget(
                               icon: Icons.shopping_bag,
                               color: Color.fromARGB(255, 223, 240, 221),
@@ -712,88 +712,88 @@ class SearchAstrologerScreen extends StatelessWidget {
                                                                 }
                                                               }
                                                             }, false),
-                                                            buttonWidget('VideoCall', Images.videoCall, () async {
-                                                              //     await [Permission.microphone, Permission.camera].request();
-                                                              // Get.to(()=>VideoCallScreen());
-
-                                                              //               bool isLogin = await global.isLogin();
-                                                              // if (isLogin) {
-                                                              //      if (astrologerList[index].charge * 5 <=
-                                                              //         global.splashController.currentUser!
-                                                              //             .walletAmount! ||
-                                                              //     astrologerList[index].isFreeAvailable == true) {
-                                                              //          await bottomNavigationController
-                                                              //         .checkAlreadyInReqForVideoCall(
-                                                              //             astrologerList[index].id);
-                                                              //      if (bottomNavigationController.isUserAlreadyInVideoCallReq==false) {
-                                                              //             await Get.to(() => CallIntakeFormScreen(
-                                                              //         astrologerProfile:
-                                                              //             astrologerList[index].profileImage,
-                                                              //         type: "VideoCall",
-                                                              //         astrologerId: astrologerList[index].id,
-                                                              //         astrologerName: astrologerList[index].name,
-                                                              //         isFreeAvailable:
-                                                              //             astrologerList[index].isFreeAvailable,
-                                                              //       ));
-                                                              //      } else {
-                                                              //       bottomNavigationController
-                                                              //           .dialogForNotCreatingSession(context);}
-
-                                                              // } else {
-                                                              //   global.showOnlyLoaderDialog(context);
-                                                              //   await walletController.getAmount();
-                                                              //   global.hideLoader();
-                                                              //   openBottomSheetRechrage(
-                                                              //       context,
-                                                              //       (astrologerList[index].charge * 5).toString(),
-                                                              //       '${astrologerList[index].name}');
-                                                              // }
-                                                              // }
-
-                                                              // bool isLogin = await global.isLogin();
-                                                              // if (isLogin) {
-                                                              //   print('charge${global.splashController.currentUser!.walletAmount! * 5}');
-                                                              //   if (astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount! || astrologerList[index].isFreeAvailable == true) {
-                                                              //     await bottomNavigationController.checkAlreadyInReqForCall(astrologerList[index].id);
-                                                              //     if (bottomNavigationController.isUserAlreadyInCallReq == false) {
-                                                              //       if (astrologerList[index].callStatus == "Online" || astrologerList[index].callStatus == "Wait Time") {
-                                                              //         global.showOnlyLoaderDialog(context);
-                                                              //         if (astrologerList[index].callWaitTime != null) {
-                                                              //           if (astrologerList[index].callWaitTime!.difference(DateTime.now()).inMinutes < 0) {
-                                                              //             await bottomNavigationController.changeOfflineCallStatus(astrologerList[index].id, "Online");
-                                                              //           }
-                                                              //         }
-                                                              //         await Get.to(() => CallIntakeFormScreen(
-                                                              //               astrologerProfile: astrologerList[index].profileImage,
-                                                              //               type: "Video Call",
-                                                              //               astrologerId: astrologerList[index].id,
-                                                              //               astrologerName: astrologerList[index].name,
-                                                              //               isFreeAvailable: astrologerList[index].isFreeAvailable,
-                                                              //             ));
-
-                                                              //         global.hideLoader();
-                                                              //       } else if (astrologerList[index].callStatus == "Offline") {
-                                                              //         bottomNavigationController.dialogForJoinInWaitListForListPageOnly(
-                                                              //           context,
-                                                              //           astrologerList[index].name,
-                                                              //           false,
-                                                              //           astrologerList[index].id,
-                                                              //           astrologerList[index].profileImage,
-                                                              //           astrologerList[index].charge,
-                                                              //           astrologerList[index].isFreeAvailable,
-                                                              //         );
-                                                              //       }
-                                                              //     } else {
-                                                              //       bottomNavigationController.dialogForNotCreatingSession(context);
-                                                              //     }
-                                                              //   } else {
-                                                              //     global.showOnlyLoaderDialog(context);
-                                                              //     await walletController.getAmount();
-                                                              //     global.hideLoader();
-                                                              //     openBottomSheetRechrage(context, (astrologerList[index].charge * 5).toString(), '${astrologerList[index].name}');
-                                                              //   }
-                                                              // }
-                                                            }, true)
+                                                            // buttonWidget('VideoCall', Images.videoCall, () async {
+                                                            //   //     await [Permission.microphone, Permission.camera].request();
+                                                            //   // Get.to(()=>VideoCallScreen());
+                                                            //
+                                                            //   //               bool isLogin = await global.isLogin();
+                                                            //   // if (isLogin) {
+                                                            //   //      if (astrologerList[index].charge * 5 <=
+                                                            //   //         global.splashController.currentUser!
+                                                            //   //             .walletAmount! ||
+                                                            //   //     astrologerList[index].isFreeAvailable == true) {
+                                                            //   //          await bottomNavigationController
+                                                            //   //         .checkAlreadyInReqForVideoCall(
+                                                            //   //             astrologerList[index].id);
+                                                            //   //      if (bottomNavigationController.isUserAlreadyInVideoCallReq==false) {
+                                                            //   //             await Get.to(() => CallIntakeFormScreen(
+                                                            //   //         astrologerProfile:
+                                                            //   //             astrologerList[index].profileImage,
+                                                            //   //         type: "VideoCall",
+                                                            //   //         astrologerId: astrologerList[index].id,
+                                                            //   //         astrologerName: astrologerList[index].name,
+                                                            //   //         isFreeAvailable:
+                                                            //   //             astrologerList[index].isFreeAvailable,
+                                                            //   //       ));
+                                                            //   //      } else {
+                                                            //   //       bottomNavigationController
+                                                            //   //           .dialogForNotCreatingSession(context);}
+                                                            //
+                                                            //   // } else {
+                                                            //   //   global.showOnlyLoaderDialog(context);
+                                                            //   //   await walletController.getAmount();
+                                                            //   //   global.hideLoader();
+                                                            //   //   openBottomSheetRechrage(
+                                                            //   //       context,
+                                                            //   //       (astrologerList[index].charge * 5).toString(),
+                                                            //   //       '${astrologerList[index].name}');
+                                                            //   // }
+                                                            //   // }
+                                                            //
+                                                            //   // bool isLogin = await global.isLogin();
+                                                            //   // if (isLogin) {
+                                                            //   //   print('charge${global.splashController.currentUser!.walletAmount! * 5}');
+                                                            //   //   if (astrologerList[index].charge * 5 <= global.splashController.currentUser!.walletAmount! || astrologerList[index].isFreeAvailable == true) {
+                                                            //   //     await bottomNavigationController.checkAlreadyInReqForCall(astrologerList[index].id);
+                                                            //   //     if (bottomNavigationController.isUserAlreadyInCallReq == false) {
+                                                            //   //       if (astrologerList[index].callStatus == "Online" || astrologerList[index].callStatus == "Wait Time") {
+                                                            //   //         global.showOnlyLoaderDialog(context);
+                                                            //   //         if (astrologerList[index].callWaitTime != null) {
+                                                            //   //           if (astrologerList[index].callWaitTime!.difference(DateTime.now()).inMinutes < 0) {
+                                                            //   //             await bottomNavigationController.changeOfflineCallStatus(astrologerList[index].id, "Online");
+                                                            //   //           }
+                                                            //   //         }
+                                                            //   //         await Get.to(() => CallIntakeFormScreen(
+                                                            //   //               astrologerProfile: astrologerList[index].profileImage,
+                                                            //   //               type: "Video Call",
+                                                            //   //               astrologerId: astrologerList[index].id,
+                                                            //   //               astrologerName: astrologerList[index].name,
+                                                            //   //               isFreeAvailable: astrologerList[index].isFreeAvailable,
+                                                            //   //             ));
+                                                            //
+                                                            //   //         global.hideLoader();
+                                                            //   //       } else if (astrologerList[index].callStatus == "Offline") {
+                                                            //   //         bottomNavigationController.dialogForJoinInWaitListForListPageOnly(
+                                                            //   //           context,
+                                                            //   //           astrologerList[index].name,
+                                                            //   //           false,
+                                                            //   //           astrologerList[index].id,
+                                                            //   //           astrologerList[index].profileImage,
+                                                            //   //           astrologerList[index].charge,
+                                                            //   //           astrologerList[index].isFreeAvailable,
+                                                            //   //         );
+                                                            //   //       }
+                                                            //   //     } else {
+                                                            //   //       bottomNavigationController.dialogForNotCreatingSession(context);
+                                                            //   //     }
+                                                            //   //   } else {
+                                                            //   //     global.showOnlyLoaderDialog(context);
+                                                            //   //     await walletController.getAmount();
+                                                            //   //     global.hideLoader();
+                                                            //   //     openBottomSheetRechrage(context, (astrologerList[index].charge * 5).toString(), '${astrologerList[index].name}');
+                                                            //   //   }
+                                                            //   // }
+                                                            // }, true)
                                                           ],
                                                         )
                                                       ],

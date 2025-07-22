@@ -252,6 +252,8 @@ void main() async {
 
   HttpOverrides.global = new MyHttpOverrides();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  Get.put(SplashController());
+
   runApp(MyApp());
   await fetchLinkData();
 }

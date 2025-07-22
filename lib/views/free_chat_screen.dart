@@ -9,6 +9,7 @@ import 'package:BharatiyAstro/controllers/timer_controller.dart';
 import 'package:BharatiyAstro/controllers/walletController.dart';
 import 'package:BharatiyAstro/utils/global.dart' as global;
 import 'package:BharatiyAstro/utils/images.dart';
+import 'package:BharatiyAstro/utils/services/api_helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,16 +44,19 @@ class FreeChatScreen extends StatefulWidget {
 }
 
 class _FreeChatScreenState extends State<FreeChatScreen> {
+  APIHelper apiHelper = new APIHelper();
+  SplashController splashCont = new SplashController();
   @override
   void initState() {
     print("Aman");
     Future.delayed(Duration(seconds: 2),(){
-      _startTimer();
+      // _startTimer();
       _sendRandomGreeting();
       // _triggerReply();
     });
-
     super.initState();
+    apiHelper.updateChatStatue();
+    // splashCont.getCurrentUserData();
   }
   final List<Map<String, String>> _messages = []; // Stores all messages
   final List<String> _greetingMessages = [
@@ -63,23 +67,21 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
     "Hello! It's a pleasure to meet you,"
   ];
   final List<String> _positiveMessages = [
-    "Stay positive and keep moving forward! 😊",
-    "Good things are coming your way! 🌟",
-    "Believe in yourself! You're amazing! 💪",
-    "Success is on the horizon! Keep going! 🌈",
-    "You're doing great! Keep up the good work! 🌟"
+    "I analyzed your Kundali...There are signs of something good happening in your life 😊.For a complete analysis of your Kundali, recharge now and contact us because your free chat has been over.",
+    "I analyzed your Kundali...Currently, there is some instability in your life — some remedies are needed👍.For a complete analysis of your Kundali, recharge now and contact us because your free chat has been over",
+    "I analyzed your Kundali...You have the potential to become a successful businessman⭐.For a complete analysis of your Kundali, recharge now and contact us because your free chat has been over",
+    "I analyzed your Kundali...There is a strong indication of sudden monetary gain (Unexpected Money) in your life😉.For a complete analysis of your Kundali, recharge now and contact us because your free chat has been over",
+
   ];
 
   final List<String> _user1Replies = [
     "What is your name?",
     "What is your gender?",
-    "What is your Date of Birth?",
-    "What is your Time of Birth?",
-    "What is your marital status?",
+    "What is your Date of Birth?(e.g., DD/MM/YYYY or MM-DD-YYYY)",
+    "What is your Time of Birth?(e.g., 14:30, 02:30 and am or pm is mandatory )",
+    "What is your marital status?('single', 'married', 'divorced', or 'widowed')",
     "How may i help you?",
-    "Do you have your kundali?",
-    "Ok wait",
-    "Have a great day!"
+
   ]; // Predefined replies for user 1
   int _currentReplyIndex = 0; // Tracks the current reply index
   final ScrollController _scrollController = ScrollController();
@@ -117,7 +119,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
 
     _handleReply(text);
   }
-
+bool chatOver=false;
   void _handleReply(String userMessage) {
     // Custom validation logic for specific questions
     if (_currentReplyIndex == 2) {
@@ -179,9 +181,24 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
       }
 
     }
-    if (_currentReplyIndex == 5) {
+
+    if (_currentReplyIndex > 5 ) {
       // After asking for marital status, send positive messages
-      _sendPositiveMessage();
+      Future.delayed(Duration(seconds: 2),(){
+        _sendPositiveMessage();
+        setState(() {
+          chatOver=true;
+        });
+        // global.showToast(message: "If you want to continue please recharge first", textColor: Colors.white, bgColor: Colors.orange);
+        // global.showOnlyLoaderDialog(context);
+        // // await walletController.getAmount();
+        // global.hideLoader();
+        // Future.delayed(Duration(seconds: 2),(){
+        //   openBottomSheetRechrage(context, widget.balance,
+        //       '${widget.astrologerName}');
+        // });
+      });
+
     }
 
 
@@ -318,7 +335,7 @@ class _FreeChatScreenState extends State<FreeChatScreen> {
   // Timer? secTimer;
   // double Minutetime = 0.0;
   Timer? _timer;
-  int _remainingSeconds = 120;
+  int _remainingSeconds = 150;
   void _startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -344,6 +361,8 @@ int balance=0;
 
   @override
   Widget build(BuildContext context) {
+    print(_messages.length);
+    print("mmmm");
     return Scaffold(
       appBar: AppBar(
         backgroundColor:
@@ -394,13 +413,13 @@ int balance=0;
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  Text(
-                    "${_remainingSeconds}s",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
-                  ),
+                  // Text(
+                  //   "${_remainingSeconds}s",
+                  //   style: TextStyle(
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.red),
+                  // ),
                 ],
               ),
             ],
@@ -486,9 +505,6 @@ int balance=0;
                           bottomNavigationController.update();
                           await bottomNavigationController.getAstrologerList(
                               isLazyLoading: false);
-                          // Get.back();
-                          // Get.back();
-                          // Get.back();
                           Get.off(() => BottomNavigationBarScreen(index: 0));
                         },
                         child: Text('Yes',
@@ -534,7 +550,7 @@ int balance=0;
                 itemBuilder: (context, index) {
                   final message = _messages[index];
                   final isUser2 = message['sender'] == "User 2";
-                  final  balance=(bottomNavigationController.astrologerList[index].charge! * 5).toString();
+                  // final  balance=(bottomNavigationController.astrologerList[index].charge! * 5).toString();
                   print("amanwwww$balance");
                   return Align(
                     alignment:
@@ -613,8 +629,9 @@ int balance=0;
                         ),
                         child: InkWell(
                           onTap: () async{
-                            if(_remainingSeconds==0) {
-                              global.showToast(message: "If you want to continue please recharge first", textColor: Colors.white, bgColor: Colors.orange);
+                            if(chatOver==true ) {
+                              print("llll");
+                              global.showToast(message: "Recharge now and contact us because your free chat has been over", textColor: Colors.white, bgColor: Colors.orange);
                               await walletController.getAmount();
                               global.showOnlyLoaderDialog(context);
                               Future.delayed(Duration(seconds: 2),(){
@@ -623,7 +640,8 @@ int balance=0;
                               });
                               global.hideLoader();
                             }else{
-                              _sendMessage(_controller.text);
+                              print("uuuu");
+                              _sendMessage(_controller.text.trim());
                             }
                           },
                           child: const Padding(

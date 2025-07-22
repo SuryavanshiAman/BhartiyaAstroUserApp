@@ -21,6 +21,7 @@ class CurrentUserModel {
     this.systemFlagList,
     this.sessionToken,
     this.countryCode,
+    this.freeChat,
   });
   int? id;
   String? name;
@@ -41,6 +42,7 @@ class CurrentUserModel {
   List<SystemFlag>? systemFlagList;
   String? sessionToken;
   String? countryCode;
+  dynamic freeChat;
 
   factory CurrentUserModel.fromJson(Map<String, dynamic> json) => CurrentUserModel(
         id: json["id"],
@@ -62,6 +64,7 @@ class CurrentUserModel {
         longitude: (json["longitude"] != null && json["longitude"] != '') ? double.parse(json["longitude"].toString()) : 0,
         systemFlagList: json['systemFlag'] != null ? List<SystemFlag>.from(json['systemFlag'].map((p) => SystemFlag.fromJson(p))) : [],
         countryCode: json["countryCode"] ?? "+91",
+    freeChat: json["freeChat"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,6 +86,7 @@ class CurrentUserModel {
         "sessionToken": sessionToken,
         "latitude": latitude,
         "longitude": longitude,
-        "countryCode": countryCode
+        "countryCode": countryCode,
+        "freeChat": freeChat
       };
 }
